@@ -51,9 +51,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use('*/images',express.static('public/images'));
 
-
-
-
 let posts = [];
 let loadMoreBlogs = 9;
 // update loadMoreBlogs when we hit post request to /contact route 
@@ -302,6 +299,17 @@ app.post("/editBlog", (req, res)=>{
     }
   })
 })
+
+///////////////////////////// authentication and start /login/register page ////////////////////////
+app.get("/", (req, res)=>{
+  res.render("start")
+})
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////
 
 const port = 5500
 app.listen(port, function() {
