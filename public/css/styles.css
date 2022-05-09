@@ -121,5 +121,58 @@ a{
 }
 
 
+/* ################################ styling start.ejs file ########################### */
+.tags i{
+  color:#00ffcc ;
+  padding-left: 40px;
+}
+.tags .write{
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+  animation-name: move-around;
+  animation-duration: 3s;
+}
+.tags .share{
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+  animation-name: move-around;
+  transition: opacity 1s;
+  /* animation-delay: 1s; */
+  animation-duration: 4.5s;
+}
 
+.tags .store{
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+  animation-name: move-around;
+  /* animation-delay: 2s; */
+  animation-duration: 5.5s;
+}
+@keyframes move-around{
+  0%{
+    transform: translateY(125px);
+      opacity: 0;
+  }
+  10%{
+      opacity: 0;
+  }
+  25%{
+    opacity: 0.1;
+  }
+  30%{
+    opacity: 0.3;
+  }
+  50%{
+    opacity: 0.5;
+  }
+  60%{
+    opacity: 0.7;
+  }
+  75%{
+    opacity: 0.9;
+  }
+  80%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 1;
+  }
 
+}
