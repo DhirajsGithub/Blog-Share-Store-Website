@@ -15,6 +15,7 @@ const res = require("express/lib/response");
 const url = 'mongodb://localhost:27017/blogsDB'
 mongoose.connect(url, {useNewUrlParser: true})
 
+
 // making a Schema
 const blogSchema = new mongoose.Schema({
   title: {
@@ -59,7 +60,8 @@ let loadMoreBlogs = 9;
 // how to deal with two submit button in one form i can't figure it our hence created two forms one page directing to differnet post route
 
 
-app.get("/", function(req, res){
+// personal blogs of a user
+app.get("/home", function(req, res){
   // finding all the blogs in the DB
   Blog.find(({}), function(err, blogs){
     if(err){
@@ -69,7 +71,7 @@ app.get("/", function(req, res){
         startingContent: homeStartingContent,
         posts: blogs, 
         loadMore: loadMoreBlogs,
-        count : blogs.length
+        count : blogs.length +"-Blogs"
         });
     }
 
@@ -78,15 +80,15 @@ app.get("/", function(req, res){
 });
 
 app.get("/about", function(req, res){
-
-  res.render("about", {aboutContent: aboutContent, count: 'about'});
+  res.render("about", {aboutContent: aboutContent, count: 'Public-Blogs'});
 });
 
 app.get("/contact", function(req, res){
-  res.render("contact", {contactContent: contactContent,count: 'contact'});
+  res.render("contact", {contactContent: contactContent,count: 'Contact-us'});
 });
 
 
+// rewuesting a compose page
 app.get("/compose", function(req, res){
   res.render("compose", { count: 'compose'});
 });
@@ -97,8 +99,7 @@ function myDate (){
   return date;
   }
 
-// console.log(date[0])
-// console.log(date[1])
+// user can compose a blog add it as personal or personal+private
 app.post("/compose", function(req, res){
     // adding the last modified feature
 
@@ -113,13 +114,13 @@ app.post("/compose", function(req, res){
     // blog.save();
     blog.save((err)=>{
       if(!err){
-        res.redirect("/");
+        res.redirect("/home");
       }
     })
 });
 
 
-
+// user can view a blog by clicking on the blog
 app.get("/posts/:blogId", function(req, res){
   // const requestedTitle = _.lowerCase(req.params.postName);
   const requestedPostId = req.params.blogId;
@@ -145,7 +146,7 @@ app.get("/posts/:blogId", function(req, res){
 // deleting/trashing items from home page moving them to trash page
 let trash;
 const Trash = mongoose.model('Trash', blogSchema);
-app.post("/", (req, res)=>{
+app.post("/home", (req, res)=>{
  
   const requestedBlogId = req.body.trashBtn;
   // console.log(requestedBlogId)
@@ -169,10 +170,10 @@ app.post("/", (req, res)=>{
       console.log("blog "+blog.title +"is deleted !!")
     }
   })
-  res.redirect("/")
+  res.redirect("/home")
 })
 
-// getting to trash
+//getting to  users trash
 app.get("/trash", function(req, res){
   // finding all the blogs in the DB
   // console.log(Blog.find())
@@ -185,14 +186,14 @@ app.get("/trash", function(req, res){
     }else{
       res.render("trash", {
         posts: blogs,
-        count : blogs.length
+        count : blogs.length+"-Trashes"
         });
     }
   }).sort('-date').sort('-time')
 
 });
 
-// put back item from trash to home page
+// put back item from trash to home page of user
 app.post("/trash", (req, res)=>{
   let putBackPostId = req.body.putBack;
   Trash.findByIdAndDelete(putBackPostId, (err, blog)=>{
@@ -213,7 +214,8 @@ app.post("/trash", (req, res)=>{
   })
   res.redirect("/trash")
 });
-// confirming the permanent delete
+
+// permanent delete of blog of user from trash and eventually from home
 app.post("/permDelete", (req, res)=>{
   // res.send("deleted")
   const perDelBlogId = req.body.permDelete;
@@ -232,7 +234,7 @@ app.post("/contact", (req, res)=>{
   const loadMore = req.body.loadMore;
   console.log(loadMore)
   setTimeout(()=>{
-    res.redirect("/")
+    res.redirect("/home")
   }, 500)
   
 })
@@ -258,7 +260,7 @@ app.get("/posts/:blogId", function(req, res){
 });
 
 
-// Updatig a blog
+// editing a blog
 app.get("/editBlog/:blogId", (req, res)=>{
   console.log("edit post id "+ req.params.blogId)
   // autocomplete the previious title and body
@@ -275,6 +277,7 @@ app.get("/editBlog/:blogId", (req, res)=>{
   })
 
 })
+// Updatig a blog
 app.post("/editBlog", (req, res)=>{
   const editPostId = req.body.buttonUp;
   const upTitle = req.body.postTitleUp;
@@ -294,7 +297,7 @@ app.post("/editBlog", (req, res)=>{
     if(err){
       console.log(err)
     }else{
-      res.redirect("/")
+      res.redirect("/home")
       console.log('update successfully', docs)
     }
   })

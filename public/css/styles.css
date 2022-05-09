@@ -60,15 +60,15 @@ form a.my-card:hover{
   color:green;
   /* box-shadow: 20px 20px 10px grey; */
   /* transform: rotate(-10deg); */
-  /* transform: scale(1.2) !important; */
+  transform: scale(1.2) !important;
 }
-form a.my-card:nth-of-type(2n+1):hover{
+/* form a.my-card:nth-of-type(2n+1):hover{
   transform: rotate(-7deg) scale(1.15);
   
 }
 form a.my-card:nth-of-type(2n):hover{
   transform: rotate(7deg) scale(1.15);
-}
+} */
 a{
   color: white;
   text-decoration: none !important;
