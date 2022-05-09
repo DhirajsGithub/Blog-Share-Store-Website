@@ -1,0 +1,2 @@
+use $ npm install
+to install all the dependecies as node_modules folder is deleted

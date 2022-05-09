@@ -1,0 +1,14 @@
+<%- include("partials/header", {count:count}); -%>
+
+<div>
+  <div style="text-align: center;">
+    <h1><%=title%></h1>
+  </div>
+  <p style="font-size:x-large;"><%=content%></p>
+</div>
+<div style="margin-top: 100px;">
+  <a href="/editBlog/<%=id%>"><button type="button" formaction="/editBlog" name="editBtn" value="<%=id%>" class="btn btn-primary btn-sm">Edit</button></a>
+</div>
+
+<%- include("partials/footer"); -%>
+
