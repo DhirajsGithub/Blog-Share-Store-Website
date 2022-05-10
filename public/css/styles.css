@@ -125,7 +125,8 @@ a{
 .tags i{
 
   font-size: x-large;
-  color:#00ffcc ;
+  /* color:#00ffcc ; */
+  color: rgb(255, 255, 255);
   padding-left: 40px;
 }
 .tags .write{
@@ -220,5 +221,11 @@ a{
   0%{
     transform: translateY(500px);
   }
+}
+
+/* ################################ styling login/register button side by side ############### */
+.side-login-register{
+  display: flex;
+  justify-content: space-between;
 }
 

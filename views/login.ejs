@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://kit.fontawesome.com/905d13f394.js" crossorigin="anonymous"></script>
+  
     <!--Stylesheet-->
     <style media="screen">
       *,
@@ -18,7 +21,9 @@
     box-sizing: border-box;
 }
 body{
-    background-image: url('/Users/dhiraj/Downloads/Full_stack_web_dev/EJS/Blog_post_website/Blog-with-Database/public/images/login-bg.jpeg');
+    /* background-image: url('/Users/dhiraj/Downloads/Full_stack_web_dev/EJS/Blog_post_website/Blog-with-Database/public/images/login-bg.jpeg'); */
+    background: #819591;
+
 
 }
 .background{
@@ -29,12 +34,12 @@ body{
     left: 50%;
     top: 50%;
 }
-.background .shape{
+/* .background .shape{
     height: 200px;
     width: 200px;
     position: absolute;
     border-radius: 50%;
-}
+} */
 .shape:first-child{
     background: linear-gradient(
         #00ffcc,
@@ -53,9 +58,10 @@ body{
     bottom: -80px;
 }
 form{
-    height: 520px;
+    height: 500px;
     width: 400px;
     background-color: rgba(255,255,255,0.13);
+    /* background-color: rgb(255, 203, 106); */
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;
@@ -103,55 +109,56 @@ input{
 button{
     margin-top: 50px;
     width: 100%;
-    background-color: #ffffff;
+    background-color: orange;
+    /* background-color: #ffffff; */
     color: #080710;
     padding: 15px 0;
     font-size: 18px;
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
+
+    border: 1px solid black;
 }
-.social{
-  margin-top: 30px;
-  display: flex;
+button:hover{
+  box-shadow: 5px 5px 10px 1px rgb(0 225 255) ;
+  transform: scale(1.01);
 }
-.social div{
-  background: red;
-  width: 150px;
-  border-radius: 3px;
-  padding: 5px 10px 10px 5px;
-  background-color: rgba(255,255,255,0.27);
-  color: #eaf0fb;
-  text-align: center;
-}
-.social div:hover{
-  background-color: rgba(255,255,255,0.47);
-}
-.social .fb{
-  margin-left: 25px;
-}
-.social i{
-  margin-right: 4px;
-}
+
 
     </style>
 </head>
 <body>
-    <div class="background">
+    <!-- <div class="background">
         <div class="shape"></div>
         <div class="shape"></div>
-    </div>
-    <form action="/login" method="POST">
-        <h3>Login Here</h3>
+    </div> -->
+    <div style="padding-top: 30px;">
+    <h1 class="tags" >
+      <i class="fa-solid fa-pen-to-square write"> &nbsp; Write</i> 
+      <i class="fa-solid fa-share-from-square share">&nbsp;Share</i>
+      <i class="fa-solid fa-cloud-arrow-up store">&nbsp;Store</i>
+    </h1>
+  </div>
+    <form action="/" method="POST">
+      <div class="login-selection" style="background: orange; border-radius: 10px;">
+      <div class="side-login-register">
+        <a href="/"><h3 class="side-login" style="padding: 2px 15px;">Login</h3></a>
+        <a href="/register"><h3 class="side-register" style="background-color:rgb(193, 113, 113);padding: 2px 15px; border-top-right-radius: 10px;">Register</h3></a>
+      </div>
+       
+        <div style="padding: 0 10px ;">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" placeholder="Email or Phone" class="form-control" name="username">
+          <input type="email" required placeholder="Email or Phone" class="form-control" name="username">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" placeholder="Password" class="form-control" name="password">
+          <input type="password" required placeholder="Password" class="form-control" name="password">
         </div>
-        <button type="submit"  class="btn btn-dark">Log In</button>
+        <button type="submit" >Log In</button>
+      </div>
+      </div>
       </form>
 
 </body>

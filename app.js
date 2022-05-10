@@ -11,6 +11,27 @@ const mongoose = require('mongoose');
 const { update } = require("lodash");
 const res = require("express/lib/response");
 
+// making a Schema
+const blogSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  }, 
+  body:{
+    type:String, 
+    required: true
+  },
+  date:{
+    type: String
+  }
+  ,
+  time:{
+    type: String
+  }
+})
+// making a collection/model
+const Blog = mongoose.model('Blog', blogSchema);
+
 
 
 ///////////////////////////// authentication and start /login/register page ////////////////////////
@@ -38,7 +59,9 @@ mongoose.connect(url, {useNewUrlParser: true})
 // it must be a mongoose schema and not standard .js object
 const userSchema = new mongoose.Schema({
     email: String,
-    password: String
+    password: String,
+    blogs : Array,
+    trash : Array
 });
 userSchema.plugin(passportLocalMongoose)
 const User = mongoose.model("BlogUser", userSchema);
@@ -58,17 +81,18 @@ passport.deserializeUser((User, done) => {
 
 
 app.get("/", (req, res)=>{
-  res.render("start")
+  res.render("login")
 })
 app.get("/register", (req, res)=>{
   res.render("register")
 })
-app.get("/login", (req, res)=>{
-  res.render("login")
-})
+// app.get("/login", (req, res)=>{
+//   res.render("login")
+// })
 // idea is to make a new collection when user registes
 // taking registeration detail from here and comparing them at time of login in out database
 app.post("/register", (req, res)=>{
+  const username = req.body.username;
   User.register({username: req.body.username}, req.body.password, (err, user)=>{
       if (err){
           console.log(err)
@@ -77,12 +101,12 @@ app.post("/register", (req, res)=>{
           // for storing as cookies
           passport.authenticate("local")(req, res, ()=>{
               // it's a get request hence create a new get get request for secrets and render secrets over there
-              res.redirect("/login")
+              res.redirect("/")
           })
       }
   })
 })
-app.post("/login", (req, res)=>{
+app.post("/", (req, res)=>{
   // https://www.passportjs.org/ 
   // this must be like the data store in our DB
   const user = new User({
@@ -106,30 +130,6 @@ app.post("/login", (req, res)=>{
 
 
 ///////////////////////////////////////////////////////////////////////
-
-
-
-// making a Schema
-const blogSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  }, 
-  body:{
-    type:String, 
-    required: true
-  },
-  date:{
-    type: String
-  }
-  ,
-  time:{
-    type: String
-  }
-})
-// making a collection/model
-const Blog = mongoose.model('Blog', blogSchema);
-
 
 
 const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
@@ -394,7 +394,7 @@ app.post("/editBlog", (req, res)=>{
 
 
 
-const port = 5501
+const port = 5500
 app.listen(port, function() {
   console.log("Server started on port ", port);
 });
