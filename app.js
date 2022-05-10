@@ -1,19 +1,112 @@
 //jshint esversion:6
 
 const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require("lodash");
-
-
-// const trash = document.querySelector(".fa-solid")
-// console.log('trash')
-
 const mongoose = require('mongoose');
+
+
 const { update } = require("lodash");
 const res = require("express/lib/response");
+
+
+
+///////////////////////////// authentication and start /login/register page ////////////////////////
+// requiring the pre build packages
+const session = require('express-session')
+const passport = require('passport')
+const passportLocalMongoose = require('passport-local-mongoose')
+
+app.use(express.static("public"))
+app.set("view engine", "ejs")
+app.use(bodyParser.urlencoded({extended:true}))
+
+app.use(session({
+    secret: 'keyboard dog',
+    resave: false,
+    saveUninitialized: false
+    // cookie: { secure: true }
+  }))
+app.use(passport.initialize());       // initialization passport
+app.use(passport.session());           // using passport to use session
+
 const url = 'mongodb://localhost:27017/blogsDB'
 mongoose.connect(url, {useNewUrlParser: true})
+
+// it must be a mongoose schema and not standard .js object
+const userSchema = new mongoose.Schema({
+    email: String,
+    password: String
+});
+userSchema.plugin(passportLocalMongoose)
+const User = mongoose.model("BlogUser", userSchema);
+
+// use static authenticate method of model in LocalStrategy
+// it must be like this
+passport.use(User.createStrategy());
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser((User, done) => {
+  done(null, User);
+});
+
+passport.deserializeUser((User, done) => {
+  done(null, User);
+});
+
+
+app.get("/", (req, res)=>{
+  res.render("start")
+})
+app.get("/register", (req, res)=>{
+  res.render("register")
+})
+app.get("/login", (req, res)=>{
+  res.render("login")
+})
+// idea is to make a new collection when user registes
+// taking registeration detail from here and comparing them at time of login in out database
+app.post("/register", (req, res)=>{
+  User.register({username: req.body.username}, req.body.password, (err, user)=>{
+      if (err){
+          console.log(err)
+          res.send(`<h1 style="font-family: sans-serif;">${err.message}<br /> Try Login or Use differnt email <br/><br/> <a href="/">Home</a> </h1> `)
+      }else{
+          // for storing as cookies
+          passport.authenticate("local")(req, res, ()=>{
+              // it's a get request hence create a new get get request for secrets and render secrets over there
+              res.redirect("/login")
+          })
+      }
+  })
+})
+app.post("/login", (req, res)=>{
+  // https://www.passportjs.org/ 
+  // this must be like the data store in our DB
+  const user = new User({
+      username : req.body.username,
+      password : req.body.password
+  });
+  req.login(user, (err)=>{
+      if(err){
+          console.log(err)
+      }else{
+          passport.authenticate("local")(req, res, ()=>{
+              // it's a get request hence create a new get get request for secrets and render secrets over there
+              res.redirect("/home")
+          })
+      }
+  })
+
+  
+})
+
+
+
+///////////////////////////////////////////////////////////////////////
+
 
 
 // making a Schema
@@ -43,10 +136,9 @@ const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui 
 const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
 const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
-const app = express();
+
 
 app.set('view engine','ejs');
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use('*/images',express.static('public/images'));
@@ -300,16 +392,7 @@ app.post("/editBlog", (req, res)=>{
   })
 })
 
-///////////////////////////// authentication and start /login/register page ////////////////////////
-app.get("/", (req, res)=>{
-  res.render("start")
-})
 
-
-
-
-
-///////////////////////////////////////////////////////////////////////
 
 const port = 5501
 app.listen(port, function() {

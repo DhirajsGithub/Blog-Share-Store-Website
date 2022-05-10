@@ -123,6 +123,7 @@ a{
 
 /* ################################ styling start.ejs file ########################### */
 .tags i{
+
   font-size: x-large;
   color:#00ffcc ;
   padding-left: 40px;
@@ -180,7 +181,7 @@ a{
 
 .login-register{
   text-align: center;
-  margin-top: 52vh;
+  /* margin-top: 52vh; */
 }
 .login-register a{
   margin: 10px;
@@ -198,25 +199,26 @@ a{
 }
 
 .speciality{
-  margin: 50px 0 0 70vw;
+  padding: 50px 0 0 70vw;
   font-size:23px;
   color: rgb(0 225 255);
 }
-.speciality li:nth-child(2n+1){
-  animation-name: transformX;
+.speciality li{
+  animation-name: transformY;
+  animation-duration: 2s;
+}
+.speciality .spec2{
+  animation-duration: 2.5s;
+}
+.speciality .spec3{
   animation-duration: 3s;
 }
-@keyframes transformX{
+.speciality .spec4{
+  animation-duration: 3.5s;
+}
+@keyframes transformY{
   0%{
-    transform: translateX(500px);
+    transform: translateY(500px);
   }
 }
-.speciality li:nth-child(2n){
-  animation-name: transformX-;
-  animation-duration: 3s;
-}
-@keyframes transformX-{
-  0%{
-    transform: translateX(-500px);
-  }
-}
+
