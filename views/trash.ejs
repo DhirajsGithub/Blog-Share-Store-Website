@@ -1,8 +1,8 @@
 
-<%- include("partials/header",  {count: count}) -%>
+<%- include("partials/header",  {count: count, username:username}) -%>
 <h2>Your Deleted Blogs</h2>
 
-<form action="/trash" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">
+<form action="/trash/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">
 <%  posts.forEach(function(post, index){ %>
 <a class="my-card" href="/home">
 <div class="card main-card" style="width: 180px !important; margin: 20px; "> 
@@ -13,7 +13,7 @@
   </h5>
   <!-- <p><%=index%></p> -->
   <span><%=post.date%>&nbsp;&nbsp; <%=post.time%></span>
-  <button type="submit" formaction="/trash" class="btn btn-primary btn-sm" value="<%=post._id%>"  name="putBack" >Put Back</button> &nbsp;&nbsp;  <button type="submit" formaction="/permDelete" name="permDelete" value="<%=post._id%>" ><i class="fa-solid fa-trash-can trashBin"></i></button>
+  <button type="submit" formaction="/trash/<%=username%>" class="btn btn-primary btn-sm" value="<%=post._id%>"  name="putBack" >Put Back</button> &nbsp;&nbsp;  <button type="submit" formaction="/permDelete/<%=username%>" name="permDelete" value="<%=post._id%>" ><i class="fa-solid fa-trash-can trashBin"></i></button>
   <!-- <span class="trashBin" style="margin-left: 10px;"><button type="submit" name="trashBtn" value="<%=post._id%>"><i class="fa-solid fa-trash-can"></i></button></span> -->
 
   </div>

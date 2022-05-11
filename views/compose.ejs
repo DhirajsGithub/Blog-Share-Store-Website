@@ -1,5 +1,5 @@
 
-<%- include("partials/header", {count:count}); -%>
+<%- include("partials/header", {count:count, username:username}); -%>
     <h1>Compose</h1>
     <form class="" action="/compose" method="post">
       <div class="form-group">
@@ -8,6 +8,7 @@
         <label>Post</label>
         <textarea class="form-control" name="postBody" rows="5" cols="30" placeholder="minimum 100 character"></textarea>
       </div>
+      <input type="text" hidden name="username" value="<%=username%>">
       <button class="btn btn-primary" type="submit" name="button">Publish</button>
     </form>
 

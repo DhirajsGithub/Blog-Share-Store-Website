@@ -1,6 +1,6 @@
-<%- include("partials/header", {count:count}); -%>
+<%- include("partials/header", {count:count, username:username}); -%>
     <h1>Edit</h1>
-    <form class="" action="/editBlog" method="post">
+    <form class="" action="/editBlog/<%=username%>" method="post">
       <div class="form-group">
         <label>Title</label>
         <input class="form-control" type="text" value="<%=title%>" name="postTitleUp">
