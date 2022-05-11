@@ -11,26 +11,7 @@ const mongoose = require('mongoose');
 const { update } = require("lodash");
 const res = require("express/lib/response");
 
-// making a Schema
-const blogSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  }, 
-  body:{
-    type:String, 
-    required: true
-  },
-  date:{
-    type: String
-  }
-  ,
-  time:{
-    type: String
-  }
-})
-// making a collection/model
-const Blog = mongoose.model('Blog', blogSchema);
+
 
 
 
@@ -59,9 +40,7 @@ mongoose.connect(url, {useNewUrlParser: true})
 // it must be a mongoose schema and not standard .js object
 const userSchema = new mongoose.Schema({
     email: String,
-    password: String,
-    blogs : Array,
-    trash : Array
+    password: String
 });
 userSchema.plugin(passportLocalMongoose)
 const User = mongoose.model("BlogUser", userSchema);
@@ -106,30 +85,70 @@ app.post("/register", (req, res)=>{
       }
   })
 })
+
+// global user
+const user = new User({
+  username : "",
+  password : ""
+});
 app.post("/", (req, res)=>{
   // https://www.passportjs.org/ 
   // this must be like the data store in our DB
-  const user = new User({
-      username : req.body.username,
-      password : req.body.password
-  });
+  // const user = new User({
+  //     username : req.body.username,
+  //     password : req.body.password
+  // });
+  user.username = req.body.username;
+  user.password = req.body.password
   req.login(user, (err)=>{
       if(err){
           console.log(err)
       }else{
           passport.authenticate("local")(req, res, ()=>{
+              console.log(user)
               // it's a get request hence create a new get get request for secrets and render secrets over there
-              res.redirect("/home")
+              Blog.find(({}), function(err, blogs){
+                if(err){
+                  console.log('error occur')
+                }else{
+                  res.render("home", {
+                    startingContent: homeStartingContent,
+                    posts: blogs, 
+                    loadMore: loadMoreBlogs,
+                    count : blogs.length +"-Blogs"
+                    });
+                }
+            
+              }).sort('-date').sort('-time')
           })
       }
   })
-
-  
 })
-
-
+console.log(user.username)
 
 ///////////////////////////////////////////////////////////////////////
+
+// making a Schema
+const blogSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  }, 
+  body:{
+    type:String, 
+    required: true
+  },
+  date:{
+    type: String
+  }
+  ,
+  time:{
+    type: String
+  },
+  owner: userSchema
+})
+// making a collection/model
+const Blog = mongoose.model('Blog', blogSchema);
 
 
 const homeStartingContent = "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
@@ -143,7 +162,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use('*/images',express.static('public/images'));
 
-let posts = [];
+// let posts = [];
 let loadMoreBlogs = 9;
 // update loadMoreBlogs when we hit post request to /contact route 
 // how to deal with two submit button in one form i can't figure it our hence created two forms one page directing to differnet post route

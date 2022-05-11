@@ -22,7 +22,7 @@
 }
 body{
     /* background-image: url('/Users/dhiraj/Downloads/Full_stack_web_dev/EJS/Blog_post_website/Blog-with-Database/public/images/login-bg.jpeg'); */
-    background: #819591;
+    background: rgb(36, 143, 131);
 
 
 }
@@ -107,22 +107,22 @@ input{
     color: #e5e5e5;
 }
 button{
-    margin-top: 50px;
-    width: 100%;
-    background-color: orange;
+    margin-top: 20px;
+    width: 80%;
+    background-color: rgba(96, 223, 223, 0.532);
     /* background-color: #ffffff; */
     color: #080710;
-    padding: 15px 0;
+    padding: 10px 40px;
     font-size: 18px;
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
 
-    border: 1px solid black;
+    border: 1px solid rgb(5, 49, 120);
 }
 button:hover{
-  box-shadow: 5px 5px 10px 1px rgb(0 225 255) ;
-  transform: scale(1.01);
+  box-shadow: 5px 5px 10px 1px rgb(43, 62, 65) ;
+  transform: scale(1.005);
 }
 
 
@@ -141,13 +141,13 @@ button:hover{
     </h1>
   </div>
     <form action="/" method="POST">
-      <div class="login-selection" style="background: orange; border-radius: 10px;">
+      <div class="login-selection" style="background: rgb(137, 206, 192); border-radius: 10px; ">
       <div class="side-login-register">
-        <a href="/"><h3 class="side-login" style="padding: 2px 15px;">Login</h3></a>
-        <a href="/register"><h3 class="side-register" style="background-color:rgb(193, 113, 113);padding: 2px 15px; border-top-right-radius: 10px;">Register</h3></a>
+        <a href="/"><h3 class="side-login" style="padding: 2px 15px; color: rgb(228, 236, 240);">Login</h3></a>
+        <a href="/register"><h3 class="side-register" style="background-color:rgb(57, 140, 165);padding: 2px 15px; border-top-right-radius: 10px;  color: rgb(228, 236, 240); ">Register</h3></a>
       </div>
        
-        <div style="padding: 0 10px ;">
+        <div style="padding: 0 10px; ">
         <div class="form-group">
           <label for="email">Email</label>
           <input type="email" required placeholder="Email or Phone" class="form-control" name="username">
@@ -156,7 +156,9 @@ button:hover{
           <label for="password">Password</label>
           <input type="password" required placeholder="Password" class="form-control" name="password">
         </div>
-        <button type="submit" >Log In</button>
+        <div style="text-align:center; padding: 15px 0;">
+        <button type="submit" >LogIn</button>
+      </div>
       </div>
       </div>
       </form>
