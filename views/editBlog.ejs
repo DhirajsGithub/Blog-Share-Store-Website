@@ -1,9 +1,11 @@
 <%- include("partials/header", {count:count, username:username}); -%>
     <h1>Edit</h1>
     <form class="" action="/editBlog/<%=username%>" method="post">
-      <div class="form-group">
+      <div class="form-group compose-edit-form">
         <label>Title</label>
         <input class="form-control" type="text" value="<%=title%>" name="postTitleUp">
+        <label>Tags</label>
+        <input class="form-control" placeholder="blog tag" type="text" value="<%=tag%>" name="postTagUp">
         <label>Post</label>
         <textarea class="form-control" name="postBodyUp" rows="5" cols="30" placeholder="minimum 100 character"><%=body%></textarea>
       </div>

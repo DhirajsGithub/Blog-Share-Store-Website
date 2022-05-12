@@ -1,27 +1,40 @@
 <%- include("partials/header", {count:count, username:username}); -%>
-    <div style="text-align:center !important; margin: 0 auto!important; display: flex; justify-content: space-around;">
-    <div class="col-xs-12 jumbotron">
-        <h3>LOS ALIENS SI EXITEN!</h3>
-       <hr/>
-       <div class="row">
-         <div class="col-md-6 text-center">
-             <h3>profile</h3>
-             <!-- <img src="https://www.allmystery.de/i/t251e55_2sqRkNr.png" alt="img1"/> -->
-           <!-- <img src="https://www.hq.nasa.gov/alsj/Apollo_NASA_Buxton.png" class="img-responsive img-circle" width="15%" alt="nasaImg" /> -->
-         </div>
-          <div class="col-md-6 text-center">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ducimus tempore dolor! Dolorum soluta aspernatur molestiae est consectetur, nesciunt eligendi. Alias molestias ipsam dignissimos doloremque quisquam magni animi modi ad nam recusandae tenetur error facilis unde mollitia, velit nulla expedita saepe dolores? Maiores ad laboriosam ducimus enim, sequi facilis voluptate.</p>
-         </div>
-         <div class="ratings-comments">
-             <h2>rating and commnets</h2>
-         </div>
-       </div>
-     </div>
+<div
+  style="
+    text-align: center !important;
+    margin: 0 auto !important;
+    display: flex;
+    justify-content: space-around;
+  "
+>
+  <div class="my-jumbtron" style="display:flex ; flex-direction: column; justify-content: space-between;">
+    <div class="title-body-tag">
+      <h3>LOS ALIENS SI EXITEN!</h3>
+      <h4>Tag</h4>
+      <div>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+          ducimus tempore dolor! Dolorum soluta aspernatur molestiae est
+          consectetur, nesciunt eligendi. Alias molestias ipsam dignissimos
+          doloremque quisquam magni animi modi ad nam recusandae tenetur error
+          facilis unde mollitia, velit nulla expedita saepe dolores? Maiores ad
+          laboriosam ducimus enim, sequi facilis voluptate.
+        </p>
+      </div>
     </div>
-    
-    
-
-
-
+    <div class="profile-rating" style="border-top: 1px solid black ;">
+      <div class="profile-date" style="display:flex ; justify-content: space-around;">
+        <h3>profile</h3>
+          <h3>Date</h3>
+      </div>
+      <div class="ratings-comments" style="display:flex ; justify-content: space-around;">
+          <h3>Rate</h3>
+        <h3 style="font-size:15px ;">
+            <input type="text" placeholder="comment" name="" id="">
+        </h3>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%- include("partials/footer"); -%>

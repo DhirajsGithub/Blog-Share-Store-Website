@@ -12,6 +12,7 @@
     <h5><%=post.body.substring(0, 100) + " ..."%> 
   </h5>
   <!-- <p><%=index%></p> -->
+  <h6 style="color: rgb(255, 66, 66); font-size: large;"><%=post.tag%></h6>
   <span><%=post.date%>&nbsp;&nbsp; <%=post.time%></span>
   <button type="submit" formaction="/trash/<%=username%>" class="btn btn-primary btn-sm" value="<%=post._id%>"  name="putBack" >Put Back</button> &nbsp;&nbsp;  <button type="submit" formaction="/permDelete/<%=username%>" name="permDelete" value="<%=post._id%>" ><i class="fa-solid fa-trash-can trashBin"></i></button>
   <!-- <span class="trashBin" style="margin-left: 10px;"><button type="submit" name="trashBtn" value="<%=post._id%>"><i class="fa-solid fa-trash-can"></i></button></span> -->

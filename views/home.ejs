@@ -27,9 +27,8 @@
         <h5><%=post.body.substring(0, 100) + " ..."%> 
           <!-- <p><%=index%></p> -->
       </h5>
-      <!-- <p><%=post.date%></p>
-      <p><%=post.time%></p> -->
-    
+      <h6 style="color: rgb(255, 66, 66); font-size: large;"><%=post.tag%></h6>
+        
      <span><%=post.date%> <br><%=post.time%></span> <span class="trashBin" style="margin-left: 10px;"><button type="submit" name="trashBtn" value="<%=post._id%>"><i class="fa-solid fa-recycle"></i></button></span>
      
       </div>

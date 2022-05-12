@@ -234,30 +234,32 @@ a{
 
 
 /* ##################################### styling jumbotron of publi blogs ################# */
-.jumbotron{
+.my-jumbtron{
+  border-radius: 20px;
+  background-color: #d7d7d7;
   padding: 10px !important;
   width: 60% !important;
   aspect-ratio: 1.5;
   margin: 5px;
   box-shadow: 10px 10px 5px #888888;
 }
-.jumbotron h3{
+.my-jumbtron h3{
   font-family: tahoma;
   color:#2980b9;
   text-align: center;
 }
-.jumbotron .jumbotronhr{
+.my-jumbtron .jumbotronhr{
   width: 5%;
   border: 1px solid black;
   /* margin-bottom:60px; */
 }
 
-.jumbotron p{
+.my-jumbtron p{
   font-size: 16px !important;
   text-align: justify;
 }
 
-.jumbotron .img-circle{
+.my-jumbtron .img-circle{
   border: 4px solid #2980b9;
   border-radius:100%;
   /* margin-top: -260px; */

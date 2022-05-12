@@ -65,7 +65,8 @@ const blogSchema = new mongoose.Schema({
   time:{
     type: String
   },
-  owner: String
+  owner: String,
+  tag : String
 })
 // making a collection/model
 const Blog = mongoose.model('Blog', blogSchema);
@@ -191,17 +192,18 @@ const publicBlogSchema = new mongoose.Schema({
     type: String
   },
   owner: String,
+  tag: String,
 
   like: Array,
 
   comments: Array
 })
 // making a collection/model
-const publicBlog = mongoose.model('publicBlog', blogSchema);
+const publicBlog = mongoose.model('publicBlog', publicBlogSchema);
 
 // public blogs
 app.get("/public/:username", function(req, res){
-  res.render("public", {aboutContent: aboutContent, count: 'Public-Blogs', username:req.params.username});
+  res.render("public", {aboutContent: aboutContent, count: 'Trending', username:req.params.username});
 });
 
 app.post("/public/:username", (req, res)=>{
@@ -212,7 +214,8 @@ app.post("/public/:username", (req, res)=>{
     body: req.body.postBody,
     date: dateOF[0],
     time: dateOF[1],
-    owner: req.body.username
+    owner: req.body.username,
+    tag : req.body.postTag
   });
 
   blog.save((err)=>{
@@ -227,7 +230,8 @@ app.post("/public/:username", (req, res)=>{
         body: req.body.postBody,
         date: dateOF[0],
         time: dateOF[1],
-        owner: req.body.username
+        owner: req.body.username,
+        tag : req.body.postTag
       });
         // blog.save();
         blog.save((err)=>{
@@ -243,7 +247,7 @@ app.post("/public/:username", (req, res)=>{
 
 // contact us blog must be modified with feed back form
 app.get("/contact/:username", function(req, res){
-  res.render("contact", {contactContent: contactContent,count: 'Contact-us', username:req.params.username});
+  res.render("contact", {contactContent: contactContent,count: 'Contact', username:req.params.username});
 });
 
 
@@ -269,7 +273,8 @@ app.post("/compose", function(req, res){
     body: req.body.postBody,
     date: dateOF[0],
     time: dateOF[1],
-    owner: req.body.username
+    owner: req.body.username,
+    tag : req.body.postTag
   });
     // blog.save();
     blog.save((err)=>{
@@ -296,7 +301,8 @@ app.get("/posts/:blogId/:username", function(req, res){
         id : blog._id,
         title: blog.title,
         content: blog.body,
-        count: blog.title
+        count: blog.title,
+        tag: blog.tag
       });
     }
   })
@@ -320,7 +326,8 @@ app.post("/home/:username", (req, res)=>{
       body: trash.body,
       date: dateOF[0],
       time: dateOF[1],
-      owner: req.params.username
+      owner: req.params.username,
+      tag : trash.tag
 
     })
     trashBlog.save();
@@ -338,8 +345,6 @@ app.post("/home/:username", (req, res)=>{
 app.get("/trash/:username", function(req, res){
   // finding all the blogs in the DB
   // console.log(Blog.find())
-
-  
   Trash.find({owner: req.params.username}, function(err, blogs){
     // console.log("length of trashBlogs ", blogs.length)
     if(err){
@@ -370,7 +375,8 @@ app.post("/trash/:username", (req, res)=>{
         body : blog.body,
         date: dateOF[0],
         time: dateOF[1],
-        owner: req.params.username
+        owner: req.params.username,
+        tag : blog.tag
       })
   post.save();
     }
@@ -434,7 +440,8 @@ app.get("/editBlog/:blogId/:username", (req, res)=>{
         editPostId: req.params.blogId,
         title : docs.title,
         body : docs.body,
-        count: 'edit'
+        count: 'edit',
+        tag: docs.tag
       })
     }
     
@@ -446,17 +453,20 @@ app.post("/editBlog/:username", (req, res)=>{
   const editPostId = req.body.buttonUp;
   const upTitle = req.body.postTitleUp;
   const upBody = req.body.postBodyUp;
+  const upTag = req.body.postTagUp;
 
   const preBlog = Blog.findById(editPostId);
   const preTitle = preBlog.title;
   const preBody = preBlog.body;
+  const preTag = preBlog.tag
   let dateOF = myDate();
   Blog.findByIdAndUpdate(editPostId, {
     title :  upTitle.length>0 ? upTitle : preTitle ,
     body: upBody.length > 3 ? upBody : preBody,
     date: dateOF[0],
     time: dateOF[1],
-    owner: req.params.username
+    owner: req.params.username,
+    tag: upTag.length>0 ? upTag : preTag ,
 
   }, function(err, docs){
     if(err){
