@@ -170,10 +170,76 @@ app.get("/home/:username", function(req, res){
 
 });
 
-// about page will be deleted soon 
-app.get("/about/:username", function(req, res){
-  res.render("about", {aboutContent: aboutContent, count: 'Public-Blogs', username:req.params.username});
+
+
+////////////////////////////////////// public blog //////////////////////////////
+// making a Schema
+const publicBlogSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  }, 
+  body:{
+    type:String, 
+    required: true
+  },
+  date:{
+    type: String
+  }
+  ,
+  time:{
+    type: String
+  },
+  owner: String,
+
+  like: Array,
+
+  comments: Array
+})
+// making a collection/model
+const publicBlog = mongoose.model('publicBlog', blogSchema);
+
+// public blogs
+app.get("/public/:username", function(req, res){
+  res.render("public", {aboutContent: aboutContent, count: 'Public-Blogs', username:req.params.username});
 });
+
+app.post("/public/:username", (req, res)=>{
+  let dateOF = myDate();
+  // let's store blog with same title as well 
+    const blog = new publicBlog({
+    title: req.body.postTitle,
+    body: req.body.postBody,
+    date: dateOF[0],
+    time: dateOF[1],
+    owner: req.body.username
+  });
+
+  blog.save((err)=>{
+    if(err){
+      console.log(err)
+    }else{
+      
+      let dateOF = myDate();
+      // let's store blog with same title as well 
+        const blog = new Blog({
+        title: req.body.postTitle,
+        body: req.body.postBody,
+        date: dateOF[0],
+        time: dateOF[1],
+        owner: req.body.username
+      });
+        // blog.save();
+        blog.save((err)=>{
+          if(!err){
+            res.redirect("/public/"+req.params.username)
+          }
+        })
+    }
+  })
+})
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 // contact us blog must be modified with feed back form
 app.get("/contact/:username", function(req, res){
