@@ -1,15 +1,15 @@
 html {
   min-height: 100%;
   position: relative;
-}
+}  
 
 .container-fluid {
-    padding-top: 70px;
-    padding-bottom: 70px;
+    padding-top: 10px;
+    /* padding-bottom: 70px; */
 }
 .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 10px;
+    /* padding-bottom: 15px; */
     border: 0;
     border-radius: 0;
     margin-bottom: 0;
@@ -46,11 +46,11 @@ html {
   font-size:medium;
 }
 .trashBin{
-  font-size: large;
-}
-.trashBin:hover{
-  cursor: pointer;
-  color: rgb(252, 71, 71);
+  float: right !important;
+} 
+.trashBin span:hover{
+  /* cursor: pointer !important; */
+  color: rgb(252, 71, 71) !important;
 }
 form a.my-card{
   text-decoration: none;
@@ -274,4 +274,13 @@ a{
 }
 .compose-edit-form input[type="text"]:nth-of-type(2){
   width: 300px;
+}
+
+
+
+/* ##################################### media query to public posts ###################### */
+@media only screen and (max-width: 600px) {
+  .public-posts {
+   width: 100%;
+  }
 }

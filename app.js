@@ -203,7 +203,16 @@ const publicBlog = mongoose.model('publicBlog', publicBlogSchema);
 
 // public blogs
 app.get("/public/:username", function(req, res){
-  res.render("public", {aboutContent: aboutContent, count: 'Trending', username:req.params.username});
+  publicBlog.find({}, (err, blogs)=>{
+    if(!err){
+      res.render("public", {
+        count: 'Trending',
+        username:req.params.username,
+        posts: blogs
+      })
+    }
+    
+  })
 });
 
 app.post("/public/:username", (req, res)=>{
@@ -274,7 +283,7 @@ app.post("/compose", function(req, res){
     date: dateOF[0],
     time: dateOF[1],
     owner: req.body.username,
-    tag : req.body.postTag
+    tag : req.body.postTag.length === 0 ? 'none' : req.body.postTag
   });
     // blog.save();
     blog.save((err)=>{
@@ -285,7 +294,7 @@ app.post("/compose", function(req, res){
 });
 
 
-// user can view a blog by clicking on the blog
+// user can view a blog by clicking on the Read More button
 app.get("/posts/:blogId/:username", function(req, res){
   // const requestedTitle = _.lowerCase(req.params.postName);
   const requestedPostId = req.params.blogId;
@@ -476,6 +485,11 @@ app.post("/editBlog/:username", (req, res)=>{
       console.log('update successfully', docs)
     }
   })
+})
+
+// setting up the avatar thing
+app.post("/avatar", (req, res)=>{
+  res.send('kj')
 })
 
 
