@@ -52,36 +52,12 @@ html {
   /* cursor: pointer !important; */
   color: rgb(252, 71, 71) !important;
 }
-form a.my-card{
-  text-decoration: none;
-  color: black;
-}
-form a.my-card:hover{
-  color:green;
-  /* box-shadow: 20px 20px 10px grey; */
-  /* transform: rotate(-10deg); */
-  transform: scale(1.2) !important;
-}
-/* form a.my-card:nth-of-type(2n+1):hover{
-  transform: rotate(-7deg) scale(1.15);
-  
-}
-form a.my-card:nth-of-type(2n):hover{
-  transform: rotate(7deg) scale(1.15);
-} */
 a{
   color: white;
   text-decoration: none !important;
   /* text-underline-offset: none; */
 }
-.main-card{
-  border: 1px solid #1abc9c;
-  padding: 5px;
-  text-align: center;
-  border-radius: 20px;
-  background-color: rgb(169, 169, 169); 
-  box-shadow: 10px 10px 10px grey;
-}
+
 .compose-btn button:hover{
   /* color: green !important; */
   box-shadow: 1px 1px 2px 1px black;
@@ -90,34 +66,6 @@ a{
   color: green !important;
   box-shadow: 1px 1px 2px 1px black;
 
-}
-
-
-
-
-/* ####################### typing effect #################  */
-.typewriter{
-  font-size: medium;
-  overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: .15em solid rgb(120, 120, 120); 
-  white-space: nowrap; /* Keeps the content on a single line */
-  margin: 10px auto 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: .15em; /* Adjust as needed */
-  animation: 
-    typing 4s steps(40, end) infinite,
-    blink-caret .75s step-end infinite;
-}
-
-/* The typing effect */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 50% }
-}
-
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% {}
 }
 
 
@@ -228,42 +176,36 @@ a{
   display: flex;
   justify-content: space-between;
 }
-
-
-
-
-
-/* ##################################### styling jumbotron of publi blogs ################# */
-.my-jumbtron{
-  border-radius: 20px;
-  background-color: #d7d7d7;
-  padding: 10px !important;
-  width: 60% !important;
-  aspect-ratio: 1.5;
-  margin: 5px;
-  box-shadow: 10px 10px 5px #888888;
-}
-.my-jumbtron h3{
-  font-family: tahoma;
-  color:#2980b9;
-  text-align: center;
-}
-.my-jumbtron .jumbotronhr{
-  width: 5%;
-  border: 1px solid black;
-  /* margin-bottom:60px; */
+.hover-blue:hover{
+  color: #1f87f0 !important;
 }
 
-.my-jumbtron p{
-  font-size: 16px !important;
-  text-align: justify;
+/* ############################ like button ######################################## */
+
+.like-toggle.basic2{
+  border: none;
+  width: 35px;
+  height: 35px;
+  font-size: 1.3em;
+  border-radius: 100px;
+  background: rgba(255, 19, 19, 0.768);
+  color: #fff;
+  transition-duration: 0.5s;
 }
 
-.my-jumbtron .img-circle{
-  border: 4px solid #2980b9;
-  border-radius:100%;
-  /* margin-top: -260px; */
+
+
+.like-toggle.basic2:hover{
+  background: #1f87f0 !important;
+  transform: scale(1.08);
+  
+  /* width: 60px; */
 }
+
+/* .likes-hover span:hover{
+  background-color: rgba(255, 19, 19, 0.768);
+} */
+
 
 /* ################################## complose / edit form styling #################### */
 .compose-edit-form label{

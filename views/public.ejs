@@ -1,5 +1,7 @@
-<%- include("partials/header", {count:count, username:username}); -%>
-<%  posts.forEach(function(post, index){ %>
+<%- include("partials/header", {count:count, username:username}); -%> <%
+
+posts.forEach(function(post, index){ %>
+
 
 <div
   style="
@@ -10,61 +12,184 @@
     padding-bottom: 14px;
   "
 >
-
-
-<article class="uk-comment uk-comment-primary public-posts" style="width: 80%; height: 310px; display: flex !important; justify-content: space-between; padding: 20px;">
-  
-  <div class="uk-comment-body" style="width:64% ;">
-    <div style="text-align: left;">
-      <h2 style="margin-bottom:10px; text-decoration: underline; text-shadow: 4px 4px 5px rgb(136, 136, 136); text-decoration-thickness: 2px; text-transform: capitalize; "><%=post.title%></h2>
-      <div style="padding-left: 10px; padding-bottom: 10px;">
-        <span class="uk-label uk-label-danger"><%=post.tag%></span>
+  <article
+    class="uk-comment uk-comment-primary public-posts"
+    style="
+      width: 80%;
+      height: 310px;
+      display: flex !important;
+      justify-content: space-between;
+      padding: 20px;
+    "
+  >
+    <div class="uk-comment-body" style="width: 64%">
+      <div style="text-align: left">
+        <h2
+          style="
+            margin-bottom: 10px;
+            text-decoration: underline;
+            text-shadow: 4px 4px 5px rgb(136, 136, 136);
+            text-decoration-thickness: 2px;
+            text-transform: capitalize;
+          "
+        >
+          <%=post.title%>
+        </h2>
+        <div style="padding-left: 10px; padding-bottom: 10px">
+          <span class="uk-label uk-label-danger"><%=post.tag%></span>
+        </div>
       </div>
-     
+      <div style="text-align: left">
+        <p style="text-align: left; padding-left: 10px; height: 130px">
+          <%=post.body.substring(0,300)+"...."%>
+        </p>
+
+
+
+        <footer>
+       <div class="readmore" style="display:inline-block ;">
+        <a
+        style="padding: 0 10px;"
+        class="uk-button uk-button-default"
+        href="/public-posts/<%=post._id%>/<%=username%>"
+        >Read More</a>
+       </div>
+       
+
+          <div class="likes likes-hover" style="display: inline-block; padding: 0 auto; width: 40%; text-align: end;">
+          <!-- <span uk-icon="icon: heart; ratio: 1.5"></span> -->
+          <form action="/likes/<%=post.id%>/<%=post.owner%>/<%=username%>" method="post">
+            <input type="text" value="1" hidden name="defaultLike">
+            <button type="submit"  uk-tooltip="Like" class='like-toggle basic2'>♥</button> &nbsp; :  &nbsp;<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:large;"
+            ><%=Array.from(new Set(post.like)).length%></span>
+
+          </form>
+          </div>
+
+        <button
+          style="
+            float: right;
+            padding: 1px 4px;
+            border: none;
+            background: none;
+            color: inherit;
+            font: inherit;
+            outline: inherit;
+          "
+          class="uk-button uk-button-primary hover-blue"
+          type="button"
+          uk-toggle="target: #<%=post.title[1]+post.tag%>; animation: uk-animation-fade"
+          uk-tooltip="Comments"
+        >
+          <span uk-icon="icon: comments; ratio: 1.5"></span>
+        </button>
+
+        <p style="float: right" id="<%=post.title[1]+post.tag%>" hidden>
+          Comments<span uk-icon="icon:  triangle-down; ratio: 2"></span>
+        </p>
+        <div
+          id="<%=post.title[1]+post.tag%>"
+          hidden
+          style="
+            z-index: 88 !important;
+            overflow-y: visible;
+            background-color: rgb(255, 255, 255);
+            width: 520px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-top: -10px !important;
+          "
+          class="uk-panel uk-panel-scrollable"
+        >
+          <ul class="uk-list">
+            <!-- <a style="padding: 0 2px;" class="uk-button-small uk-button-primary" href="#<%=post.id%>" uk-scroll>
+              comment <span uk-icon="icon:  chevron-down; ratio: 1"></span></a> -->
+            <li>
+              <ol>
+                <% post.comments.forEach((comment, index)=>{ %>
+                <li>
+                  <div style="margin-bottom: 5px">
+                    <h5 style="margin: 0"><%=comment.username%></h5>
+                    <p style="margin: 0">
+                      <span uk-icon="triangle-right"></span>
+                      <%=comment.comment%>
+                    </p>
+                  </div>
+                </li>
+                <% })%>
+
+                <li></li>
+              </ol>
+            </li>
+          </ul>
+
+          <form id="<%=post.id%>"
+            method="post"
+            action="/comments/<%=post.id%>/<%=post.owner%>/<%=username%>"
+            style="text-align: center; box-sizing: border-box;"
+          >
+            <input
+              style="width: 60%; height: 40px;"
+              type="text"
+              name="comment"
+              placeholder="comment here"
+            />
+            <button
+              type="submit"
+              style="padding: 0 4px; border-radius: 10px; margin-left: 5px"
+              class="uk-button uk-button-primary uk-button-small"
+            >
+              Post
+            </button>
+          </form>
+        </div>
+      </footer>
+      </div>
     </div>
-    <div style="text-align: left;">
-    <p  style="text-align: left; padding-left: 10px; height: 130px;"><%=post.body.substring(0,300)+"...."%></p>
-  
-    <a style="padding: 0 10px" class="uk-button uk-button-default" href="/public-posts/<%=post._id%>/<%=username%>">Read More</a>
-
-      <button style="float: right; padding: 1px 4px; border: none; background: none; color: inherit;font: inherit;outline: inherit;" href="#toggle-animation" 
-      class="uk-button uk-button-primary" type="button" uk-toggle="target: #toggle-animation; animation: uk-animation-fade">
-      <span uk-icon="icon: comments; ratio: 1.5"></span></button>
-<div id="toggle-animation" class="uk-card uk-card-default uk-card-body uk-margin-small">Animation</div>
-
-
-
-
-
-  </div>
-</div>
-&nbsp;  &nbsp; &nbsp; 
-<hr class="uk-divider-vertical" style="height:250px ;">
-  <div class="profile" style="width:36% ;">
-      <div >
-          <div class="uk-width-auto">
-              <img class="uk-comment-avatar" src="https://avatars.dicebear.com/api/adventurer/your-custom-seed.svg" width="50" height="50" alt="">
-          </div>
-          <div >
-              <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"><%=post.owner%></a></h4>
-              <br>
-              <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top" style="display:inline-block ;">
-            
-                <li><a> post : <%=post.date%></a></li>
-            </ul><br>
-            
-          </div>
-          <a class="uk-button uk-button-primary" href="/user/public/<%=post.owner%>/<%=username%>">Visit</a>
-          
+    &nbsp; &nbsp; &nbsp;
+    <hr class="uk-divider-vertical" style="height: 250px" />
+    <div class="profile" style="width: 36%">
+      <div>
+        <div class="uk-width-auto">
+          <img
+            class="uk-comment-avatar"
+            src="https://avatars.dicebear.com/api/adventurer/your-custom-seed.svg"
+            width="50"
+            height="50"
+            alt=""
+          />
+        </div>
+        <div>
+          <h4 class="uk-comment-title uk-margin-remove">
+            <a class="uk-link-reset" href="#"
+              ><%=post.owner.substring(0,15)%></a
+            >
+          </h4>
+          <br />
+          <ul
+            class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top"
+            style="display: inline-block"
+          >
+            <li><a> post : <%=post.date%></a></li>
+          </ul>
+          <br />
+        </div>
+        <a
+          class="uk-button uk-button-primary"
+          href="/user/public/<%=post.owner%>/<%=username%>"
+          >Visit</a
+        >
       </div>
-</div>
-  
-</article>
-
+    </div>
+  </article>
 </div>
 <% }) %>
-<div style="text-align: end; margin: 10px;"><a class="uk-button uk-button-primary" href="/public/<%=username%>" uk-scroll>Scroll Top</a>
+<div style="text-align: end; margin: 10px">
+  <a class="uk-button uk-button-primary" href="/public/<%=username%>" uk-scroll
+    >Scroll Top</a
+  >
 </div>
 
 <%- include("partials/footer"); -%>
-

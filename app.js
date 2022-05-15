@@ -201,17 +201,25 @@ const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 // public blogs
 app.get("/public/:username", function (req, res) {
   publicBlog.find({}, (err, blogs) => {
+
+    // counting the likes ???
+
+    // console.log(blogs[0].id)
     if (!err) {
       res.render("public", {
         count: "Trending",
         username: req.params.username,
         posts: blogs,
+        
       });
+    
     }
   });
 });
 
 app.post("/public/:username", (req, res) => {
+
+
   let dateOF = myDate();
   // let's store blog with same title as well
   const blog = new publicBlog({
@@ -286,6 +294,7 @@ app.get("/user/public/:postOwner/:username", (req, res) => {
   });
 });
 
+// NOT working
 app.post("/user/subscribe/:owner/:subscribed", (req, res)=>{
   const reqSub = req.params.subscribed;
   const owner = req.params.owner;
@@ -297,6 +306,38 @@ app.post("/user/subscribe/:owner/:subscribed", (req, res)=>{
   res.redirect("/user/public/"+owner+"/"+reqSub)
   // res.send(User.findOne({email: owner}))
 
+})
+
+app.post("/comments/:blogId/:owner/:username", (req, res)=>{
+  const blogId = req.params.blogId
+  const comment = req.body.comment
+  // res.send(comment)
+  publicBlog.findByIdAndUpdate(blogId, {$push: {comments: {comment: comment, username: req.params.username}}}, (err, success)=>{
+    if(err){
+      console.log(err)
+      // res.redirect("/public/"+req.params.username);
+    }else{
+      res.redirect("/public/"+req.params.username);
+    }
+  })
+})
+
+app.post("/likes/:blogId/:owner/:username", (req, res)=>{
+  const blogId = req.params.blogId
+  const defaultLike = req.body.defaultLike
+  // console.log('comment id is', comment)
+  // res.send(comment)
+  publicBlog.findById(blogId, (err, docs)=>{
+    console.log(docs.like)
+  })
+  publicBlog.findByIdAndUpdate(blogId, {$push: {like: req.params.username}}, (err, success)=>{
+    if(err){
+      console.log(err)
+      // res.redirect("/public/"+req.params.username);
+    }else{
+      res.redirect("/public/"+req.params.username);
+    }
+  })
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////
