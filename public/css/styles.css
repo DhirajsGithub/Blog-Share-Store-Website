@@ -284,3 +284,8 @@ a{
    width: 100%;
   }
 }
+@media (max-width: 800px) {
+  .public-posts {
+   width: 100% !important;
+  }
+}

@@ -1,0 +1,57 @@
+
+<%- include("partials/header", {count:count, username:username}); -%>
+<div class="uk-background-muted uk-padding uk-panel">
+  <div style="width: 50%; display: inline-block;" >
+    <h2><%=owner%></h2>
+    <form action="/user/subscribe/<%=owner%>/<%=username%>" method="post">
+      <button type="submit" class="uk-button uk-button-danger">Subscribe</button>
+    </form>
+   
+    
+  </div>
+  <div style="width: 49%; display: inline-block;">
+   <div style="float: right ;" class="stats">
+     <p>stats</p>
+     <!-- <h1>he</h1> -->
+   </div>
+  </div>
+  <h3>Public Posts</h3>
+    
+
+<form action="/home/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">
+
+  <%  posts.forEach(function(post, index){ %>
+
+<div class="uk-animation-toggle " style=" margin:20px auto;" tabindex="0">
+      <div class="uk-animation-scale-up">
+    <div class="uk-card uk-card-default uk-width-1-2@m" style="width:240px;">
+      <div class="uk-card-header" style="padding: 2px 15px;">
+          <div class="uk-grid-small uk-flex-middle" uk-grid>
+              <div class="uk-width-auto">
+              </div>
+              <div class="uk-width-expand" >
+                  <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 10)%></h3>
+                  <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00"><%=post.date%> &nbsp;  |&nbsp;  <%=post.time%></time></p>
+                  <span class="uk-label uk-label-danger"><%=post.tag%></span>
+              </div>
+          </div>
+      </div>
+      <div class="uk-card-body" style="height:150px !important; padding: 20px;">
+        <p><%=post.body.substring(0, 150) + " ..."%> </p>
+      </div>
+      <div class="uk-card-footer">
+        <!-- <span class="trashBin"><button style="padding:0; padding: 0 auto;" type="submit" name="trashBtn" value="<%=post._id%>"> 
+        </button></span> -->
+        <a href="/public-posts/<%=post._id%>/<%=username%>" class="uk-button uk-button-text">Read more</a>
+      </div>
+  </div>
+</div>
+</div>
+
+    <% }) %>
+  </form>
+  
+
+</div>
+
+<%- include("partials/footer"); -%>

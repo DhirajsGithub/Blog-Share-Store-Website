@@ -16,15 +16,26 @@
   
   <div class="uk-comment-body" style="width:64% ;">
     <div style="text-align: left;">
-      <h2 style="margin-bottom:5px; text-decoration: underline; text-shadow: 4px 4px 5px rgb(136, 136, 136); text-decoration-thickness: 2px; text-transform: capitalize; "><%=post.title%></h2>
-      <div style="padding-left: 10px;">
+      <h2 style="margin-bottom:10px; text-decoration: underline; text-shadow: 4px 4px 5px rgb(136, 136, 136); text-decoration-thickness: 2px; text-transform: capitalize; "><%=post.title%></h2>
+      <div style="padding-left: 10px; padding-bottom: 10px;">
         <span class="uk-label uk-label-danger"><%=post.tag%></span>
       </div>
      
     </div>
     <div style="text-align: left;">
-    <p  style="text-align: left; padding-left: 10px; height: 150px;">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-    <button  style="padding: 0 10px" class="uk-button uk-button-default">Read More</button>
+    <p  style="text-align: left; padding-left: 10px; height: 130px;"><%=post.body.substring(0,300)+"...."%></p>
+  
+    <a style="padding: 0 10px" class="uk-button uk-button-default" href="/public-posts/<%=post._id%>/<%=username%>">Read More</a>
+
+      <button style="float: right; padding: 1px 4px; border: none; background: none; color: inherit;font: inherit;outline: inherit;" href="#toggle-animation" 
+      class="uk-button uk-button-primary" type="button" uk-toggle="target: #toggle-animation; animation: uk-animation-fade">
+      <span uk-icon="icon: comments; ratio: 1.5"></span></button>
+<div id="toggle-animation" class="uk-card uk-card-default uk-card-body uk-margin-small">Animation</div>
+
+
+
+
+
   </div>
 </div>
 &nbsp;  &nbsp; &nbsp; 
@@ -35,13 +46,16 @@
               <img class="uk-comment-avatar" src="https://avatars.dicebear.com/api/adventurer/your-custom-seed.svg" width="50" height="50" alt="">
           </div>
           <div >
-              <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"><%=username%></a></h4>
+              <h4 class="uk-comment-title uk-margin-remove"><a class="uk-link-reset" href="#"><%=post.owner%></a></h4>
               <br>
               <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top" style="display:inline-block ;">
             
                 <li><a> post : <%=post.date%></a></li>
-            </ul>
+            </ul><br>
+            
           </div>
+          <a class="uk-button uk-button-primary" href="/user/public/<%=post.owner%>/<%=username%>">Visit</a>
+          
       </div>
 </div>
   
@@ -53,3 +67,4 @@
 </div>
 
 <%- include("partials/footer"); -%>
+

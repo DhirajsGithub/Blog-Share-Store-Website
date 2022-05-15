@@ -8,16 +8,19 @@
   </div>
   <p style="font-size:x-large;"><%=content%></p>
 </div>
-<div style="margin-top: 100px;">
+<div style="margin-top: 100px; padding-bottom: 20px;">
   <a  href="/editBlog/<%=id%>/<%=username%>"  uk-icon="icon: file-edit; ratio: 2" uk-tooltip="edit your blog" ><button 
     style="background: none;
         color: inherit;
         border: none;
-        padding: 0;
         font: inherit;
         cursor: pointer;
         outline: inherit;"
     type="button" formaction="/editBlog/<%=id%>/<%=username%>" name="editBtn" value="<%=id%>"></button></a>
+
+    <div style="float: right;">
+    <a style="padding:0 10px;" class="uk-button uk-button-primary" href="/home/<%=username%>"><span class="uk-margin-small-right" uk-icon="icon: arrow-left; ratio: 1.5"></span>Back</a>
+  </div>
   
 </div>
 

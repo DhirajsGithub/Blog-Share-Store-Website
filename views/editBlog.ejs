@@ -10,6 +10,8 @@
         <textarea class="form-control" name="postBodyUp" rows="5" cols="30" placeholder="minimum 100 character"><%=body%></textarea>
       </div>
       <button class="btn btn-primary" value="<%=editPostId%>" type="submit" name="buttonUp">Update</button>
+      <button formaction="/editBlog/<%=username%>/public" class="btn btn-primary" value="<%=editPostId%>" type="submit" name="buttonUp">Update Share</button>
+
     </form>
 
 <%- include("partials/footer"); -%>
