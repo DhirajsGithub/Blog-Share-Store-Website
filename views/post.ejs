@@ -8,7 +8,7 @@
   </div>
   <p style="font-size:x-large;"><%=content%></p>
 </div>
-<div style="margin-top: 100px; padding-bottom: 20px;">
+<div style="margin-top: 100px; padding-bottom: 20px; display: flex; justify-content: space-evenly;">
   <a  href="/editBlog/<%=id%>/<%=username%>"  uk-icon="icon: file-edit; ratio: 2" uk-tooltip="edit your blog" ><button 
     style="background: none;
         color: inherit;
@@ -18,9 +18,11 @@
         outline: inherit;"
     type="button" formaction="/editBlog/<%=id%>/<%=username%>" name="editBtn" value="<%=id%>"></button></a>
 
-    <div style="float: right;">
-    <a style="padding:0 10px;" class="uk-button uk-button-primary" href="/home/<%=username%>"><span class="uk-margin-small-right" uk-icon="icon: arrow-left; ratio: 1.5"></span>Back</a>
-  </div>
+    <!-- <div style="float: right;"> -->
+     <a href="/pr-to-pb/<%=id%>/<%=username%>"> <button style="padding:0 10px; display: <%=display%>;" uk-tooltip="share your private blog"  class="uk-button uk-button-secondary">Share<span uk-icon="icon: forward; ratio: 1.6"></span></button> </a>
+     
+    <a style="padding:0 10px;" uk-tooltip="back to home" class="uk-button uk-button-primary" href="/home/<%=username%>"><span class="uk-margin-small-right" uk-icon="icon: arrow-left; ratio: 1.5"></span>Back</a>
+  <!-- </div> -->
   
 </div>
 

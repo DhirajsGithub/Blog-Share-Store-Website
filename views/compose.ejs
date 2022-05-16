@@ -20,8 +20,10 @@
         <textarea class="form-control" name="postBody" rows="5" cols="30" placeholder="minimum 100 character"></textarea>
       </div>
       <input type="text" hidden name="username" value="<%=username%>">
-      <button class="btn btn-primary" type="submit" name="button">Publish</button>
+      <input type="text" hidden name="private" value="private">
+      <button class="btn btn-primary" type="submit" name="button">Store</button>
 
+      <input type="text" hidden name="public" value="public">
       <button class="btn btn-primary" formaction="/public/<%=username%>" type="submit" name="button">Share</button>
     </form>
 
