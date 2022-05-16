@@ -38,7 +38,9 @@ mongoose.connect(url, { useNewUrlParser: true });
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
-  subscription: Array
+  subscription: Array,
+  notification : Array,
+  avatar : String
 });
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("BlogUser", userSchema);
@@ -298,46 +300,119 @@ app.get("/user/public/:postOwner/:username", (req, res) => {
 app.post("/user/subscribe/:owner/:subscribed", (req, res)=>{
   const reqSub = req.params.subscribed;
   const owner = req.params.owner;
-  
-  User.findOne({username: owner}, {$set : {$push:{subscription: reqSub}} })
-  let user = User.findOne({username: owner})
-  console.log(user)
-  console.log(user._id)
-  res.redirect("/user/public/"+owner+"/"+reqSub)
-  // res.send(User.findOne({email: owner}))
+  let date = new Date();
+  // adding to subscription of same user
+  User.findOne({username : owner}, (err, docs)=>{
+    const sub = docs.subscription.find((element)=>{
+      return element == reqSub
+    })
+    if(!sub){
+      User.findOneAndUpdate({username: owner}, {$push:{subscription: reqSub} }, (err, success)=>{
+        if(!err){
+          console.log("subscription added")
+        }
+      })
+    }
+  })
 
+  // adding Subscriptions to notificatio of owner user
+  User.findOneAndUpdate({username: owner},{$push: {notification: {
+    subscribeBy : reqSub,
+    date : date.toLocaleDateString(),
+    time : date.toLocaleTimeString()
+  } }}, (err, success)=>{
+    if(!err){
+      res.redirect("/user/public/"+owner+"/"+reqSub);
+    }
+  })
+  // let user = User.findOne({username: owner})
+  // console.log(user)
+  // console.log(user._id)
+  // res.send(User.findOne({email: owner}))
 })
 
+
+// adding comments to notificatio of owner user
 app.post("/comments/:blogId/:owner/:username", (req, res)=>{
   const blogId = req.params.blogId
   const comment = req.body.comment
+  let date = new Date();
   // res.send(comment)
   publicBlog.findByIdAndUpdate(blogId, {$push: {comments: {comment: comment, username: req.params.username}}}, (err, success)=>{
     if(err){
       console.log(err)
       // res.redirect("/public/"+req.params.username);
     }else{
-      res.redirect("/public/"+req.params.username);
+      publicBlog.findById(blogId, (err, docs)=>{
+        User.findOneAndUpdate({username: req.params.owner},{$push: {notification: {
+          blogTitle : docs.title,
+          commentBy : req.params.username,
+          date : date.toLocaleDateString(),
+          time : date.toLocaleTimeString()
+        } }}, (err, success)=>{
+          if(!err){
+            res.redirect("/public/"+req.params.username);
+          }
+        })
+      })
+      
     }
   })
 })
 
+// adding likes to notificatio of owner user
 app.post("/likes/:blogId/:owner/:username", (req, res)=>{
   const blogId = req.params.blogId
   const defaultLike = req.body.defaultLike
-  // console.log('comment id is', comment)
-  // res.send(comment)
+  let date = new Date();
+
   publicBlog.findById(blogId, (err, docs)=>{
-    console.log(docs.like)
+    console.log(docs)
+    
   })
-  publicBlog.findByIdAndUpdate(blogId, {$push: {like: req.params.username}}, (err, success)=>{
-    if(err){
-      console.log(err)
-      // res.redirect("/public/"+req.params.username);
+
+  // store only unique subscribers in the like array of blog
+  publicBlog.findById(blogId, (err, docs)=>{
+    const liked = docs.like.find((sub)=>{
+      return sub == req.params.username
+    })
+    if(!liked){
+      // adding to like array of public blog with id blogId
+      publicBlog.findByIdAndUpdate(blogId, {$push: {like: req.params.username}}, (err, success)=>{
+        if(err){
+          console.log(err)
+          // res.redirect("/public/"+req.params.username);
+        }else{
+          // adding to liked by to  notification of owner
+          publicBlog.findById(blogId, (err, docs)=>{
+            User.findOneAndUpdate({username: req.params.owner},{$push: {notification: {
+              blogTitle : docs.title,
+              likedBy : req.params.username,
+              date : date.toLocaleDateString(),
+              time : date.toLocaleTimeString()
+            } }}, (err, success)=>{
+              if(!err){
+                res.redirect("/public/"+req.params.username);
+              }if(err){
+                console.log(err)
+              }
+            })
+          }) 
+        }
+      })
     }else{
       res.redirect("/public/"+req.params.username);
     }
   })
+  
+  
+  
+
+})
+
+app.get("/activities/private/:username", (req, res)=>{
+  User.find
+  res.render("activities", {})
 })
 
 //////////////////////////////////////////////////////////////////////////////////////////
