@@ -65,8 +65,34 @@ const blogSchema = new mongoose.Schema({
   tag: String,
   prPb : String
 });
+
+// making a Schema for each blog public as well private
+const publicBlogSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  body: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+  },
+  time: {
+    type: String,
+  },
+  owner: String,
+  tag: String,
+
+  like: Array,
+
+  comments: Array,
+  prPb : String
+});
+
 // making a collection/model
-const Blog = mongoose.model("Blog", blogSchema);
+const Blog = mongoose.model("Blog", publicBlogSchema);
 
 // use static authenticate method of model in LocalStrategy
 // it must be like this
@@ -174,38 +200,40 @@ app.get("/home/:username", function (req, res) {
 });
 
 ////////////////////////////////////// public blog //////////////////////////////
-// making a Schema
-const publicBlogSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  body: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: String,
-  },
-  time: {
-    type: String,
-  },
-  owner: String,
-  tag: String,
+// // making a Schema
+// const publicBlogSchema = new mongoose.Schema({
+//   title: {
+//     type: String,
+//     required: true,
+//   },
+//   body: {
+//     type: String,
+//     required: true,
+//   },
+//   date: {
+//     type: String,
+//   },
+//   time: {
+//     type: String,
+//   },
+//   owner: String,
+//   tag: String,
 
-  like: Array,
+//   like: Array,
 
-  comments: Array,
-  prPb : String
-});
+//   comments: Array,
+//   prPb : String
+// });
 // making a collection/model
 const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 
 // public blogs
 app.get("/public/:username", function (req, res) {
+
+  
+
   publicBlog.find({}, (err, blogs) => {
     // counting the likes ???
-
     // console.log(blogs[0].id)
     if (!err) {
       res.render("public", {
@@ -219,7 +247,7 @@ app.get("/public/:username", function (req, res) {
 
 app.post("/public/:username", (req, res) => {
   let dateOF = myDate();
-  // let's store blog with same title as well
+  // let's store blog in the public model
   const blog = new publicBlog({
     title: req.body.postTitle,
     body: req.body.postBody,
@@ -230,13 +258,15 @@ app.post("/public/:username", (req, res) => {
     prPb : req.body.public
   });
 
-  blog.save((err) => {
+  blog.save((err, result) => {
     if (err) {
       console.log(err);
     } else {
       let dateOF = myDate();
-      // let's store blog with same title as well
+      // let's store blog in the blog model
       const blog = new Blog({
+        // for having same id of public and private blog for updatation and delete when user update/delete blog from home
+        _id : result.id,
         title: req.body.postTitle,
         body: req.body.postBody,
         date: dateOF[0],
@@ -284,17 +314,34 @@ app.get("/public-posts/:blogId/:username", (req, res) => {
 });
 app.get("/user/public/:postOwner/:username", (req, res) => {
   const reqUser = req.params.postOwner;
-  publicBlog.find({ owner: reqUser }, (err, blogs) => {
-    res.render("UserPublicPost", {
-      owner: req.params.postOwner,
-      count: blogs.length + "-Blogs",
-      posts: blogs,
-      username: req.params.username,
+
+  User.findOne({username: reqUser}, (err, docs)=>{
+    // counting likes 
+    let likesCount = 0
+    let likes = docs.notification.forEach((element)=>{
+      if(element.likedBy){
+        likesCount++
+      }
+    })
+   
+    publicBlog.find({ owner: reqUser }, (err, blogs) => {
+      res.render("UserPublicPost", {
+        totalLikes : likesCount,
+        avgLikes : (likesCount/blogs.legth),
+        owner: req.params.postOwner,
+        noOfSub : docs.subscription.length,
+        count: blogs.length + "-Blogs",
+        posts: blogs,
+        username: req.params.username,
+      });
     });
-  });
+  })
+
+
+  
 });
 
-// NOT working
+// adding subscribers to schema of user
 app.post("/user/subscribe/:owner/:subscribed", (req, res) => {
   const reqSub = req.params.subscribed;
   const owner = req.params.owner;
@@ -374,7 +421,7 @@ app.post("/comments/:blogId/:owner/:username", (req, res) => {
             },
             (err, success) => {
               if (!err) {
-                res.redirect("/public/" + req.params.username);
+                res.redirect("/public/" + req.params.username+"#"+blogId);
               }
             }
           );
@@ -421,7 +468,7 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
                 },
                 (err, success) => {
                   if (!err) {
-                    res.redirect("/public/" + req.params.username);
+                    res.redirect("/public/" + req.params.username+"#"+blogId);
                   }
                   if (err) {
                     console.log(err);
@@ -433,7 +480,7 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
         }
       );
     } else {
-      res.redirect("/public/" + req.params.username);
+      res.redirect("/public/" + req.params.username+"#"+blogId);
     }
   });
 });
@@ -518,22 +565,24 @@ app.get("/posts/:blogId/:username", function (req, res) {
 
 // deleting/trashing items from home page moving them to trash page
 let trash;
-const Trash = mongoose.model("Trash", blogSchema);
+const Trash = mongoose.model("Trash", publicBlogSchema);
 app.post("/home/:username", (req, res) => {
   const requestedBlogId = req.body.trashBtn;
   // console.log(requestedBlogId)
   Blog.findByIdAndDelete(requestedBlogId, (err, blog) => {
     trash = blog;
     // console.log(trash)
-    // saving the trash blog to new collection called it trashCol
+    // saving the trash blog to new collection called it trash with same blog id
     let dateOF = myDate();
     const trashBlog = new Trash({
+      _id : trash.id,
       title: trash.title,
       body: trash.body,
       date: dateOF[0],
       time: dateOF[1],
       owner: req.params.username,
-      tag: trash.tag
+      tag: trash.tag,
+      prPb : trash.prPb
     });
     trashBlog.save();
 
@@ -541,9 +590,10 @@ app.post("/home/:username", (req, res) => {
       console.log(err);
     } else {
       // console.log("blog " + blog.title + "is deleted !!");
+      res.redirect("/home/" + req.params.username);
     }
   });
-  res.redirect("/home/" + req.params.username);
+  
 });
 
 //getting to  users trash
@@ -575,14 +625,16 @@ app.post("/trash/:username", (req, res) => {
       console.log(err);
     } else {
       let dateOF = myDate();
-      // puting back
+      // puting back with same id
       const post = new Blog({
+        _id : blog.id,
         title: blog.title,
         body: blog.body,
         date: dateOF[0],
         time: dateOF[1],
         owner: req.params.username,
         tag: blog.tag,
+        prPb : blog.prPb
       });
       post.save(err);
     }
@@ -598,7 +650,14 @@ app.post("/permDelete/:username", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.redirect("/trash/" + req.params.username);
+      publicBlog.findByIdAndDelete(perDelBlogId, (err, blog)=>{
+        if(err){
+          console.log(err)
+        }else{
+          res.redirect("/trash/" + req.params.username);
+        }
+      })
+      
     }
   });
 });
@@ -646,6 +705,7 @@ app.get("/editBlog/:blogId/:username", (req, res) => {
         body: docs.body,
         count: "edit",
         tag: docs.tag,
+        prPb: docs.prPb
       });
     }
   });
@@ -678,9 +738,6 @@ app.post("/editBlog/:username", (req, res) => {
       } else {
         // for public blog updatation
         const preBlog = publicBlog.findById(editPostId);
-        const preTitle = preBlog.title;
-        const preBody = preBlog.body;
-        const preTag = preBlog.tag;
         let dateOF = myDate();
         publicBlog.findByIdAndUpdate(
           editPostId,
@@ -712,11 +769,14 @@ app.get("/pr-to-pb/:blogId/:username", (req, res)=>{
   const reqBlog = req.params.blogId
   const onwner = req.params.owner
   let dateOF = myDate();
-  Blog.findByIdAndDelete(reqBlog, (err, docs)=>{
+
+  Blog.findByIdAndUpdate(reqBlog, {prPb : 'public'}, (err, docs)=>{
     if(err){
       console.log(err)
     }else{
+      // storing the blog in publicBlog model 
       const blog = new publicBlog({
+        _id : docs.id,
         title: docs.title,
         body: docs.body,
         date: dateOF[0],
@@ -729,28 +789,59 @@ app.get("/pr-to-pb/:blogId/:username", (req, res)=>{
         if(err){
           console.log(err)
         }else{
-          const blog = new Blog({
-            title: docs.title,
-            body: docs.body,
-            date: dateOF[0],
-            time: dateOF[1],
-            owner: docs.owner,
-            tag: docs.tag,
-            prPb : 'public'
-          });
-          blog.save((err)=>{
-            if(err){
-              console.log(err)
-            }else{
-              res.redirect("/home/"+req.params.username)
-            }
-          })
+          res.redirect("/home/"+req.params.username)
         }
       })
     }
-    
-    
+     
+      
   })
+
+
+
+
+  // Blog.findByIdAndDelete(reqBlog, (err, docs)=>{
+  //   if(err){
+  //     console.log(err)
+  //   }else{
+  //     const blog = new publicBlog({
+  //       _id : docs.id,
+  //       title: docs.title,
+  //       body: docs.body,
+      //   date: dateOF[0],
+      //   time: dateOF[1],
+      //   owner: docs.owner,
+      //   tag: docs.tag,
+      //   prPb : 'public'
+      // });
+      // blog.save((err)=>{
+      //   if(err){
+      //     console.log(err)
+      //   }else{
+      //     const blog = new Blog({
+      //       title: docs.title,
+      //       body: docs.body,
+      //       date: dateOF[0],
+      //       time: dateOF[1],
+      //       owner: docs.owner,
+  //           tag: docs.tag,
+  //           prPb : 'public'
+  //         });
+  //         blog.save((err)=>{
+  //           if(err){
+  //             console.log(err)
+  //           }else{
+  //             res.redirect("/home/"+req.params.username)
+  //           }
+  //         })
+  //       }
+  //     })
+  //   }
+  
+  
+    
+    
+  // })
   
 
 })

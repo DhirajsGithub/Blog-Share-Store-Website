@@ -38,6 +38,7 @@
                   <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 10)%></h3>
                   <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00"><%=post.date%> &nbsp;  |&nbsp;  <%=post.time%></time></p>
                   <span class="uk-label uk-label-danger"><%=post.tag.substring(0, 10)%></span>
+                  <span style="font-size:14px; float: right;" class="uk-badge"><%=post.prPb%></span>
               </div>
           </div>
       </div>
@@ -57,7 +58,7 @@
         outline: inherit;" 
         
         type="submit" formaction="/permDelete/<%=username%>" name="permDelete" value="<%=post._id%>" 
-        ><span  class="uk-icon-button" uk-tooltip="Permenant Delete" uk-icon="trash"></span> </button>
+        ><span  class="uk-icon-button" uk-tooltip="Permenant Delete From Private as well Public posts" uk-icon="trash"></span> </button>
           
       </div>
   </div>

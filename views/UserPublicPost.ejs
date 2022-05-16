@@ -1,7 +1,11 @@
 
 <%- include("partials/header", {count:count, username:username}); -%>
 <div class="uk-background-muted uk-padding uk-panel">
-  <div style="width: 50%; display: inline-block;" >
+
+  <div style="display:flex ; justify-content: space-between;">
+
+  
+  <div  >
     <h2><%=owner%></h2>
     <form action="/user/subscribe/<%=owner%>/<%=username%>" method="post">
       <button type="submit" class="uk-button uk-button-danger">Subscribe</button>
@@ -9,12 +13,16 @@
    
     
   </div>
-  <div style="width: 49%; display: inline-block;">
-   <div style="float: right ;" class="stats">
-     <p>stats</p>
+
+   <div style="text-align: end;" class="stats">
+    <span class="uk-label uk-label-warning">Subscribers : <%=noOfSub%></span><br><br>
+    <span class="uk-label uk-label-danger">Blogs Count : <%=count.split("-")[0]%></span><br><br>
+    <span class="uk-label">Total Likes : <%=totalLikes%></span><br><br>
+      <span class="uk-label uk-label-success">Avg Likes : <%=(totalLikes/count.split("-")[0]).toFixed(2)%></span>
      <!-- <h1>he</h1> -->
    </div>
   </div>
+ 
   <h3>Public Posts</h3>
     
 

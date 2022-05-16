@@ -1,9 +1,12 @@
 <%- include("partials/header", {count:count, username:username}); -%> <%
 
 posts.forEach(function(post, index){ %>
+<div  class="my_element"  id="<%=post.id%>" style="overflow-y: scroll;">
 
+</div>
 
 <div
+
   style="
     text-align: center !important;
     margin: 0 auto !important;
@@ -112,7 +115,7 @@ posts.forEach(function(post, index){ %>
                 <li>
                   <div style="margin-bottom: 5px">
                     <h5 style="margin: 0"><%=comment.username%></h5>
-                    <p style="margin: 0">
+                    <p id="<%=post.id%>" style="margin: 0">
                       <span uk-icon="triangle-right"></span>
                       <%=comment.comment%>
                     </p>
