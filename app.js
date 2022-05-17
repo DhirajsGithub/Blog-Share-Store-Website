@@ -38,7 +38,19 @@ mongoose.connect(url, { useNewUrlParser: true });
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
+  // the users which subscribed to owner
   subscription: Array,
+
+  // the owner which subscribe to other user
+  subscribedTo : Array,
+
+  // posts liked/comment by other user to the owner
+  likedBy : Array,
+  commentBy: Array,
+
+  // owner liked/comment by owner to other user
+  commentTo: Array,
+  likedTo : Array,
   notification: Array,
   avatar: String,
 });
@@ -243,6 +255,17 @@ const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 // public blogs
 app.get("/public/:username", function (req, res) {
 
+  // generating random string for comment to be appear
+  function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789eaa7e6e071169252aa385b0df9e411b02";
+  
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
+  }
+
   if(req.isAuthenticated()){
     publicBlog.find({}, (err, blogs) => {
       // counting the likes ???
@@ -380,39 +403,47 @@ app.get("/user/public/:postOwner/:username", (req, res) => {
 });
 
 // adding subscribers to schema of user
-app.post("/user/subscribe/:owner/:subscribed", (req, res) => {
-  const reqSub = req.params.subscribed;
+app.post("/user/subscribe/:owner/:username", (req, res) => {
+  const reqSub = req.params.username;
   const owner = req.params.owner;
   let date = new Date();
-  // adding to subscription of same user
+
+  // adding the subscription of :username to :owner i.e. adding to subscription
   User.findOne({ username: owner }, (err, docs) => {
     const sub = docs.subscription.find((element) => {
-      return element == reqSub;
+      return element.subscribedBy == reqSub;
     });
     if (!sub) {
       User.findOneAndUpdate(
         { username: owner },
-        { $push: { subscription: reqSub } },
+        { $push: { subscription: {
+          subscribedBy: reqSub,
+          date: date.toLocaleDateString(),
+          time: date.toLocaleTimeString(),
+        } } },
         (err, success) => {
           if (!err) {
-            // adding Subscriptions to notificatio of owner user
-            User.findOneAndUpdate(
-              { username: owner },
-              {
-                $push: {
-                  notification: {
-                    subscribeBy: reqSub,
-                    date: date.toLocaleDateString(),
-                    time: date.toLocaleTimeString(),
-                  },
-                },
-              },
-              (err, success) => {
-                if (!err) {
-                  res.redirect("/user/public/" + owner + "/" + reqSub);
-                }
+            // adding Subscribed to :owner in :username i.e. adding to subscribedTo
+            User.findOne({username : reqSub}, (err, docs)=>{
+              const subTo = docs.subscribedTo.find((element)=>{
+                return element.subscribedTo == owner;
+              });
+              if(!subTo){
+                User.findOneAndUpdate({username:reqSub}, {$push : {subscribedTo: {
+                  subscribedTo: owner,
+                  date: date.toLocaleDateString(),
+                  time: date.toLocaleTimeString(),
+                }}}, (err, success)=>{
+                  if(err){
+                    console.log(err)
+                  }else{
+                    res.redirect("/user/public/" + owner + "/" + reqSub);
+                  }
+                })
+              }else{
+                res.redirect("/user/public/" + owner + "/" + reqSub);
               }
-            );
+            })
           }
         }
       );
@@ -422,34 +453,37 @@ app.post("/user/subscribe/:owner/:subscribed", (req, res) => {
     }
   });
 
-  // let user = User.findOne({username: owner})
-  // console.log(user)
-  // console.log(user._id)
-  // res.send(User.findOne({email: owner}))
 });
 
-// adding comments to notificatio of owner user
+// adding comments to blog itself as well as to owner and username
 app.post("/comments/:blogId/:owner/:username", (req, res) => {
   const blogId = req.params.blogId;
   const comment = req.body.comment;
   let date = new Date();
   // res.send(comment)
+  // adding comment to specific blog itself
   publicBlog.findByIdAndUpdate(
     blogId,
     {
-      $push: { comments: { comment: comment, username: req.params.username } },
+      $push: { comments: { 
+        comment: comment, 
+        username: req.params.username,
+        date: date.toLocaleDateString(),
+        time: date.toLocaleTimeString(),
+      } },
     },
     (err, success) => {
       if (err) {
         console.log(err);
         // res.redirect("/public/"+req.params.username);
       } else {
+        // adding to onwer of the blog
         publicBlog.findById(blogId, (err, docs) => {
           User.findOneAndUpdate(
             { username: req.params.owner },
             {
               $push: {
-                notification: {
+                commentBy: {
                   blogTitle: docs.title,
                   commentBy: req.params.username,
                   date: date.toLocaleDateString(),
@@ -459,7 +493,25 @@ app.post("/comments/:blogId/:owner/:username", (req, res) => {
             },
             (err, success) => {
               if (!err) {
-                res.redirect("/public/" + req.params.username+"#"+blogId);
+                // adding to user which commented 
+                User.findOneAndUpdate(
+                  { username: req.params.username },
+                  {
+                    $push: {
+                      commentTo: {
+                        blogTitle: docs.title,
+                        blogOwner : req.params.owner,
+                        date: date.toLocaleDateString(),
+                        time: date.toLocaleTimeString(),
+                      },
+                    },
+                  },
+                  (err, success) => {
+                    if (!err) {
+                      res.redirect("/public/" + req.params.username+"#"+blogId);
+                    }
+                  }
+                );
               }
             }
           );
@@ -472,31 +524,36 @@ app.post("/comments/:blogId/:owner/:username", (req, res) => {
 // adding likes to notificatio of owner user
 app.post("/likes/:blogId/:owner/:username", (req, res) => {
   const blogId = req.params.blogId;
-  const defaultLike = req.body.defaultLike;
   let date = new Date();
 
   // store only unique subscribers in the like array of blog
   publicBlog.findById(blogId, (err, docs) => {
-    const liked = docs.like.find((sub) => {
-      return sub == req.params.username;
+    const liked = docs.like.find((element) => {
+      return element.likeBy == req.params.username;
     });
     if (!liked) {
       // adding to like array of public blog with id blogId
       publicBlog.findByIdAndUpdate(
         blogId,
-        { $push: { like: req.params.username } },
+        { $push: { like: {
+          likeBy: req.params.username,
+          date: date.toLocaleDateString(),
+          time: date.toLocaleTimeString(),
+
+        } } },
         (err, success) => {
           if (err) {
             console.log(err);
             // res.redirect("/public/"+req.params.username);
           } else {
-            // adding to liked by to  notification of owner
+            // adding to likedBy of owner
+            // no need to check the condition if uniques likes are store in blog then unique like will be store here as well
             publicBlog.findById(blogId, (err, docs) => {
               User.findOneAndUpdate(
                 { username: req.params.owner },
                 {
                   $push: {
-                    notification: {
+                    likedBy: {
                       blogTitle: docs.title,
                       likedBy: req.params.username,
                       date: date.toLocaleDateString(),
@@ -506,7 +563,28 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
                 },
                 (err, success) => {
                   if (!err) {
-                    res.redirect("/public/" + req.params.username+"#"+blogId);
+                    // adding to likedTo of username
+                    User.findOneAndUpdate(
+                      { username: req.params.username },
+                      {
+                        $push: {
+                          likedTo: {
+                            blogTitle: docs.title,
+                            likedOwner: req.params.owner,
+                            date: date.toLocaleDateString(),
+                            time: date.toLocaleTimeString(),
+                          },
+                        },
+                      },
+                      (err, success) => {
+                        if (!err) {
+                          res.redirect("/public/" + req.params.username+"#"+blogId);
+                        }
+                        if (err) {
+                          console.log(err);
+                        }
+                      }
+                    );
                   }
                   if (err) {
                     console.log(err);

@@ -82,19 +82,35 @@ a{
 }
 
 .compose-btn button:hover{
-  /* color: green !important; */
 
   box-shadow: 2px 2px 5px 2px #1abc9c;
-  transition-duration: 0.5s;
 }
 .compose-btn button:hover span{
   color:#1abc9c ;
   transition-duration: 0.5s;
 }
+.compose-btn button:hover {
+  color:black ;
+  transition: ease-in-out;
+  transition-duration: 1s;
+}
 .load-more:hover{
   color: green !important;
   box-shadow: 1px 1px 2px 1px black;
 
+}
+.daily-blogs p:hover{
+  color:#1abc9c ;
+}
+.daily-blogs p:active{
+  color:#1abc9c ;
+  /* transition-duration: 0.5s; */
+}
+.uk-animation-scale-grow{
+  transition-duration:0.4s ;
+}
+.uk-animation-scale-grow:hover{
+  transform: scale(1.1);
 }
 
 
@@ -258,4 +274,5 @@ a{
    width: 100% !important;
   }
 }
+
 
