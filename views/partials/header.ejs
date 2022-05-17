@@ -31,13 +31,31 @@
           </span>
         </p>
       </div>
-        <ul class="nav navbar-nav navbar-right">
-          <li id="home"><a href="/home/<%=username%>">HOME</a></li>
-          <li id="public"><a href="/public/<%=username%>">ABOUT US</a></li>
-          <li id="contact"><a href="/contact/<%=username%>">CONTACT US</a></li>
-          <li> <a href="/trash/<%=username%>"><i class="fa-solid fa-recycle"></i>
-            </a></li>
-        </ul>
+
+
+      <div class="dropdown"  style="padding:0; text-align: end;" >
+        <div class="uk-inline spin-on-hover">
+          <div style="text-align: center;">
+            <img src="https://avatars.dicebear.com/api/adventurer/your-fsafsffcustom-seed.svg" width="50" height="50" >
+            <div></div>
+            <span style="margin:0; letter-spacing: 1px;">Profile</span><span class="spin-arrow" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+          </div>
+         
+          <div  uk-dropdown="duration:100; delay-hide:100;" style="padding: 0px;">
+            <ul class="nav navbar-nav ">
+              <li id="home"><a href="/home/<%=username%>"><span uk-icon="icon: home; ratio: 1.5"></span>&nbsp;HOME </a></li>
+              <li id="public"><a href="/public/<%=username%>">ABOUT US</a></li>
+              <li id="contact"><a href="/contact/<%=username%>">CONTACT US</a></li>
+              <li > <a  href="/trash/<%=username%>"><span uk-icon="icon: trash; ratio: 1.5"></span>&nbsp;TRASH </a></li> 
+              <li style="border-top:1px solid rgb(72, 72, 72) ;" > <a  href="/"><span uk-icon="icon: sign-out; ratio: 1.5"></span>&nbsp;LOG OUT
+                </a></li>
+            </ul>
+          </div>
+      </div>
+      </div>
+
+
+        
         
     </div>
   </nav>

@@ -179,8 +179,17 @@ app.use("*/images", express.static("public/images"));
 
 // how to deal with two submit button in one form i can't figure it our hence created two forms one page directing to differnet post route
 
+// checking for authentication of home/username
+// app.get("/secrets", (req, res)=>{
+//   if(req.isAuthenticated()){
+//       res.render("secrets")
+//   }else{
+//       res.redirect("/login")
+//   }
+// })
 // personal blogs of a user
 app.get("/home/:username", function (req, res) {
+  if(req.isAuthenticated()){
   // console.log(req.params.username);
   // finding all the blogs in the DB
   Blog.find({ owner: req.params.username }, function (err, blogs) {
@@ -197,6 +206,10 @@ app.get("/home/:username", function (req, res) {
   })
     .sort("-date")
     .sort("-time");
+  }else{
+    res.redirect("/")
+  }
+
 });
 
 ////////////////////////////////////// public blog //////////////////////////////
@@ -230,19 +243,22 @@ const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 // public blogs
 app.get("/public/:username", function (req, res) {
 
-  
+  if(req.isAuthenticated()){
+    publicBlog.find({}, (err, blogs) => {
+      // counting the likes ???
+      // console.log(blogs[0].id)
+      if (!err) {
+        res.render("public", {
+          count: "Trending",
+          username: req.params.username,
+          posts: blogs,
+        });
+      }
+    });
+  }else{
+    res.redirect("/")
+  }
 
-  publicBlog.find({}, (err, blogs) => {
-    // counting the likes ???
-    // console.log(blogs[0].id)
-    if (!err) {
-      res.render("public", {
-        count: "Trending",
-        username: req.params.username,
-        posts: blogs,
-      });
-    }
-  });
 });
 
 app.post("/public/:username", (req, res) => {
@@ -286,34 +302,51 @@ app.post("/public/:username", (req, res) => {
 });
 
 app.get("/public-posts/:blogId/:username", (req, res) => {
-  const reqPublicBlogId = req.params.blogId;
-  publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
-    res.render("publicPost", {
-      username: req.params.username,
-      title: blog.title,
-      tag: blog.tag,
-      content: blog.body,
-      count: "Public",
-      owner: blog.owner,
+
+  if(req.isAuthenticated()){
+    const reqPublicBlogId = req.params.blogId;
+    publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
+      res.render("publicPost", {
+        username: req.params.username,
+        title: blog.title,
+        tag: blog.tag,
+        content: blog.body,
+        count: "Public",
+        owner: blog.owner,
+      });
     });
-  });
+  }else{
+      res.redirect("/")
+    }
+
+
 });
 
 app.get("/public-posts/:blogId/:username", (req, res) => {
-  const reqPublicBlogId = req.params.blogId;
-  publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
-    res.render("publicPost", {
-      username: req.params.username,
-      title: blog.title,
-      tag: blog.tag,
-      content: blog.body,
-      count: "Public",
-      owner: blog.owner,
+
+
+  if(req.isAuthenticated()){
+    const reqPublicBlogId = req.params.blogId;
+    publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
+      res.render("publicPost", {
+        username: req.params.username,
+        title: blog.title,
+        tag: blog.tag,
+        content: blog.body,
+        count: "Public",
+        owner: blog.owner,
+      });
     });
-  });
+  }else{
+        res.redirect("/")
+      }
+
+
 });
 app.get("/user/public/:postOwner/:username", (req, res) => {
-  const reqUser = req.params.postOwner;
+
+  if(req.isAuthenticated()){
+    const reqUser = req.params.postOwner;
 
   User.findOne({username: reqUser}, (err, docs)=>{
     // counting likes 
@@ -337,6 +370,11 @@ app.get("/user/public/:postOwner/:username", (req, res) => {
     });
   })
 
+  }else{
+          res.redirect("/")
+        }
+
+  
 
   
 });
@@ -486,26 +524,45 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
 });
 
 app.get("/notification/private/:username", (req, res) => {
-  User.findOne({username : req.params.username}, (err, docs)=>{
-    console.log(docs)
-    res.render("notification", {count : 'Notifications', username: req.params.username, user : docs})
-  })
+
+  if(req.isAuthenticated()){
+    User.findOne({username : req.params.username}, (err, docs)=>{
+      console.log(docs)
+      res.render("notification", {count : 'Notifications', username: req.params.username, user : docs})
+    })
+  }else{
+            res.redirect("/")
+    }
+
+
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // contact us blog must be modified with feed back form
 app.get("/contact/:username", function (req, res) {
-  res.render("contact", {
-    contactContent: contactContent,
-    count: "Contact",
-    username: req.params.username,
-  });
+
+  if(req.isAuthenticated()){
+    res.render("contact", {
+      contactContent: contactContent,
+      count: "Contact",
+      username: req.params.username,
+    });
+  }else{
+              res.redirect("/")
+      }
+
+
 });
 
 // getting a compose page
 app.get("/compose/:username", function (req, res) {
-  res.render("compose", { count: "compose", username: req.params.username });
+  if(req.isAuthenticated()){
+    res.render("compose", { count: "compose", username: req.params.username });
+  }else{
+                res.redirect("/")
+        }
+  
 });
 
 function myDate() {
@@ -541,7 +598,9 @@ app.post("/compose", function (req, res) {
 
 // user can view a blog by clicking on the Read More button
 app.get("/posts/:blogId/:username", function (req, res) {
-  // const requestedTitle = _.lowerCase(req.params.postName);
+
+  if(req.isAuthenticated()){
+    // const requestedTitle = _.lowerCase(req.params.postName);
   const requestedPostId = req.params.blogId;
   // console.log(requestedPostId);
   // console.log(req.params.blogId);
@@ -561,6 +620,11 @@ app.get("/posts/:blogId/:username", function (req, res) {
       });
     }
   });
+  }else{
+    res.redirect("/")
+          }
+
+  
 });
 
 // deleting/trashing items from home page moving them to trash page
@@ -598,7 +662,9 @@ app.post("/home/:username", (req, res) => {
 
 //getting to  users trash
 app.get("/trash/:username", function (req, res) {
-  // finding all the blogs in the DB
+
+  if(req.isAuthenticated()){
+     // finding all the blogs in the DB
   // console.log(Blog.find())
   Trash.find({ owner: req.params.username }, function (err, blogs) {
     // console.log("length of trashBlogs ", blogs.length)
@@ -614,6 +680,11 @@ app.get("/trash/:username", function (req, res) {
   })
     .sort("-date")
     .sort("-time");
+  }else{
+      res.redirect("/")
+            }
+
+ 
 });
 
 // put back item from trash to home page of user
@@ -694,7 +765,8 @@ app.post("/permDelete/:username", (req, res) => {
 
 // editing a blog
 app.get("/editBlog/:blogId/:username", (req, res) => {
-  // console.log("edit post id " + req.params.blogId);
+  if(req.isAuthenticated()){
+ // console.log("edit post id " + req.params.blogId);
   // autocomplete the previious title and body
   Blog.findById(req.params.blogId, (err, docs) => {
     if (!err) {
@@ -709,6 +781,10 @@ app.get("/editBlog/:blogId/:username", (req, res) => {
       });
     }
   });
+  }else{
+        res.redirect("/")
+              }
+ 
 });
 // Updatig a blog . BUG not updating the public blog
 app.post("/editBlog/:username", (req, res) => {
@@ -766,40 +842,41 @@ app.post("/editBlog/:username", (req, res) => {
 
 // making private blog to public blog
 app.get("/pr-to-pb/:blogId/:username", (req, res)=>{
-  const reqBlog = req.params.blogId
-  const onwner = req.params.owner
-  let dateOF = myDate();
-
-  Blog.findByIdAndUpdate(reqBlog, {prPb : 'public'}, (err, docs)=>{
-    if(err){
-      console.log(err)
-    }else{
-      // storing the blog in publicBlog model 
-      const blog = new publicBlog({
-        _id : docs.id,
-        title: docs.title,
-        body: docs.body,
-        date: dateOF[0],
-        time: dateOF[1],
-        owner: docs.owner,
-        tag: docs.tag,
-        prPb : 'public'
-      });
-      blog.save((err)=>{
-        if(err){
-          console.log(err)
-        }else{
-          res.redirect("/home/"+req.params.username)
-        }
-      })
-    }
-     
-      
-  })
-
-
-
-
+  if(req.isAuthenticated()){
+    const reqBlog = req.params.blogId
+    const onwner = req.params.owner
+    let dateOF = myDate();
+  
+    Blog.findByIdAndUpdate(reqBlog, {prPb : 'public'}, (err, docs)=>{
+      if(err){
+        console.log(err)
+      }else{
+        // storing the blog in publicBlog model 
+        const blog = new publicBlog({
+          _id : docs.id,
+          title: docs.title,
+          body: docs.body,
+          date: dateOF[0],
+          time: dateOF[1],
+          owner: docs.owner,
+          tag: docs.tag,
+          prPb : 'public'
+        });
+        blog.save((err)=>{
+          if(err){
+            console.log(err)
+          }else{
+            res.redirect("/home/"+req.params.username)
+          }
+        })
+      }
+       
+        
+    })
+  }else{
+          res.redirect("/")
+                }
+  
   // Blog.findByIdAndDelete(reqBlog, (err, docs)=>{
   //   if(err){
   //     console.log(err)

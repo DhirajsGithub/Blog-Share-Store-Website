@@ -22,6 +22,29 @@ html {
 .navbar-nav li i{
   font-size:x-large;
 }
+.spin-on-hover{
+  transition-duration: 0.4s;
+  transition: ease-in-out;
+}
+.spin-on-hover:hover{
+  cursor: pointer;
+}
+.spin-on-hover:hover img{
+  animation-duration: 1s;
+  border-radius: 100px;
+  border: 1px solid #00ffcc;
+}
+.spin-on-hover:hover .spin-arrow{
+  transition-duration: 0.4s;
+  transform: rotate(90deg);
+}
+.spin-on-hover li{
+  text-align: start;
+  width: 100%;
+}
+.spin-on-hover li:hover{
+  background-color: #f8f8f8;
+}
 
 .footer-padding {
 	padding-bottom: 60px;
