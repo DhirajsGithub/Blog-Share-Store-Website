@@ -83,7 +83,13 @@ a{
 
 .compose-btn button:hover{
   /* color: green !important; */
-  box-shadow: 1px 1px 2px 1px black;
+
+  box-shadow: 2px 2px 5px 2px #1abc9c;
+  transition-duration: 0.5s;
+}
+.compose-btn button:hover span{
+  color:#1abc9c ;
+  transition-duration: 0.5s;
 }
 .load-more:hover{
   color: green !important;
@@ -217,7 +223,6 @@ a{
 }
 
 
-
 .like-toggle.basic2:hover{
   background: #1f87f0 !important;
   transform: scale(1.08);
@@ -228,13 +233,6 @@ a{
 /* .likes-hover span:hover{
   background-color: rgba(255, 19, 19, 0.768);
 } */
-
-.my_element.scrollIntoView{
-  behavior: "smooth";
-  block: "start";
-  inline: "nearest";
-};
-
 
 /* ################################## complose / edit form styling #################### */
 .compose-edit-form label{

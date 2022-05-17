@@ -156,7 +156,7 @@ app.post("/", function (req, res) {
       passport.authenticate("local")(req, res, function () {
         // console.log(user)
         // it's a get request hence create a new get get request for secrets and render secrets over there
-        res.redirect(`/home/${user.username}`);
+        res.redirect(`/public/${user.username}`);
         // res.render("home")
       });
     }

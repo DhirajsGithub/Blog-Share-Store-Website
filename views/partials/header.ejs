@@ -24,16 +24,26 @@
 <div uk-sticky>
   <nav class="navbar navbar-default">
     <div class="container" style="position: sticky;">
-      <div class="navbar-header">
-        <p class="navbar-brand">DAILY JOURNAL
-          <span style="margin-left: -10px; margin-top:-30px; background-color: rgba(255, 19, 19, 0.768); font-weight:normal; font-size: 12px; line-height: 9px; letter-spacing: 2px;" class="position-absolute badge">
-            <%=count%>
-          </span>
-        </p>
+      <!-- <div class="navbar-header">
+        
+      </div> -->
+      <div style="display: flex ; justify-content: space-between;">
+      <div class="daily-blogs" style="display: flex ; flex-direction: column; justify-content: center;">
+      <p style="font-size:x-large ;" > Daily Blogs
+        <span style="margin-left: -10px; margin-top:-30px; background-color: rgba(255, 19, 19, 0.768); font-weight:normal; font-size: 12px; line-height: 9px; letter-spacing: 2px;" class="position-absolute badge">
+          <%=count%>
+        </span>
+      </p>   
       </div>
 
+    <div class="left-align" style="display: flex !important; justify-content: space-evenly;">
+    <div class="compose-btn" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 50px;">
+      <a href="/compose/<%=username%>">  <button style="padding: 2px 10px;" class="uk-button uk-button-primary"><span uk-icon="icon: pencil; ratio: 1.5"></span> Compose
+        </button></a> 
+    </div>
+    
 
-      <div class="dropdown"  style="padding:0; text-align: end;" >
+      <div class="dropdown"  style=" display: flex ; flex-direction: column; justify-content: center;" >
         <div class="uk-inline spin-on-hover">
           <div style="text-align: center;">
             <img src="https://avatars.dicebear.com/api/adventurer/your-fsafsffcustom-seed.svg" width="50" height="50" >
@@ -44,15 +54,19 @@
           <div  uk-dropdown="duration:100; delay-hide:100;" style="padding: 0px;">
             <ul class="nav navbar-nav ">
               <li id="home"><a href="/home/<%=username%>"><span uk-icon="icon: home; ratio: 1.5"></span>&nbsp;HOME </a></li>
+              <li id="home"><a href="/user/public/<%=username%>/<%=username%>"><span uk-icon="icon: users; ratio: 1.5"></span>&nbsp;PUBLIC </a></li>
               <li id="public"><a href="/public/<%=username%>">ABOUT US</a></li>
               <li id="contact"><a href="/contact/<%=username%>">CONTACT US</a></li>
               <li > <a  href="/trash/<%=username%>"><span uk-icon="icon: trash; ratio: 1.5"></span>&nbsp;TRASH </a></li> 
-              <li style="border-top:1px solid rgb(72, 72, 72) ;" > <a  href="/"><span uk-icon="icon: sign-out; ratio: 1.5"></span>&nbsp;LOG OUT
+              <li style="border-top:1px solid rgba(104, 104, 104, 0.874);" > <a  href="/"><span uk-icon="icon: sign-out; ratio: 1.5"></span>&nbsp;LOG OUT
                 </a></li>
             </ul>
           </div>
       </div>
       </div>
+    </div>
+
+    </div>
 
 
         
