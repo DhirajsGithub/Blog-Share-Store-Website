@@ -43,6 +43,12 @@
       <a href="/compose/<%=username%>">  <button style="padding: 2px 10px;" class="uk-button uk-button-primary"><span uk-icon="icon: pencil; ratio: 1.5"></span> Compose
         </button></a> 
     </div>
+    <div class="community-link com-not-link" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 50px;">
+      <a href="/compose/<%=username%>"> <span uk-icon="icon: users; ratio: 1.5"></span>&nbsp;COMMUNITY </a></li> </a> 
+    </div>
+    <div class="notification-link com-not-link" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 50px;">
+      <a href="/compose/<%=username%>"> <span uk-icon="icon: bell; ratio: 1.5"></span>&nbsp; </a></li> </a> 
+    </div>
     
 
       <div class="dropdown"  style=" display: flex ; flex-direction: column; justify-content: center;" >
@@ -50,15 +56,15 @@
           <div style="text-align: center;">
             <img src="https://avatars.dicebear.com/api/adventurer/your-fsafsffcustom-seed.svg" width="50" height="50" >
             <div></div>
-            <span style="margin:0; letter-spacing: 1px;">Profile</span><span class="spin-arrow" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+            <span style="margin:0; letter-spacing: 1px;"><%=username%></span><span class="spin-arrow" uk-icon="icon: triangle-right; ratio: 1.5"></span>
           </div>
          
           <div  uk-dropdown="duration:100; delay-hide:100;" style="padding: 0px;">
             <ul class="nav navbar-nav ">
               <li id="home"><a href="/home/<%=username%>"><span uk-icon="icon: home; ratio: 1.5"></span>&nbsp;HOME </a></li>
-              <li id="home"><a href="/user/public/<%=username%>/<%=username%>"><span uk-icon="icon: users; ratio: 1.5"></span>&nbsp;PUBLIC </a></li>
+              <li id="home"><a href="/user/public/<%=username%>/<%=username%>"><span uk-icon="icon: user; ratio: 1.5"></span>&nbsp;PUBLIC </a></li>
               <!-- <li id="public"><a href="/public/<%=username%>">ABOUT US</a></li> -->
-              <li id="contact"><a href="#"><span uk-icon="icon: bell; ratio: 1.5"></span>&nbsp;NOTIFY</a></li>
+              <!-- <li id="contact"><a href="#"><span uk-icon="icon: bell; ratio: 1.5"></span>&nbsp;NOTIFY</a></li> -->
               <li id="contact"><a href="#"><span uk-icon="icon: history; ratio: 1.5"></span>&nbsp;ACTIVITIES</a></li>
               <li > <a  href="/trash/<%=username%>"><span uk-icon="icon: trash; ratio: 1.5"></span>&nbsp;TRASH </a></li> 
               <li style="border-top:1px solid rgba(104, 104, 104, 0.874);" > <a  href="/"><span uk-icon="icon: sign-out; ratio: 1.5"></span>&nbsp;LOG OUT

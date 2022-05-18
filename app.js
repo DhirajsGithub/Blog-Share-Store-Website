@@ -53,6 +53,7 @@ const userSchema = new mongoose.Schema({
   likedTo : Array,
   notification: Array,
   avatar: String,
+  username: String
 });
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("BlogUser", userSchema);

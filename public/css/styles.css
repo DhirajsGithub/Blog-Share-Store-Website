@@ -87,17 +87,16 @@ a{
 }
 .compose-btn button:hover span{
   color:#1abc9c ;
-  transition-duration: 0.5s;
+  /* transition-duration: 0.5s; */
 }
 .compose-btn button:hover {
   color:black ;
   transition: ease-in-out;
-  transition-duration: 1s;
+  /* transition-duration: 1s; */
 }
 .load-more:hover{
   color: green !important;
   box-shadow: 1px 1px 2px 1px black;
-
 }
 .daily-blogs p:hover{
   color:#1abc9c ;
@@ -112,7 +111,13 @@ a{
 .uk-animation-scale-grow:hover{
   transform: scale(1.1);
 }
-
+.com-not-link a{
+  text-decoration: none;
+  color: black !important;
+}
+.com-not-link a:hover{
+  color: #1abc9c !important;
+}
 
 /* ################################ styling start.ejs file ########################### */
 .tags i{
