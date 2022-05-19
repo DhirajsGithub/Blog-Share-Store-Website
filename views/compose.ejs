@@ -1,7 +1,7 @@
 
 <%- include("partials/header", {count:count, username:username}); -%>
     <h1>Compose</h1>
-    <form class="" action="/compose" method="post">
+    <form class="" action="/compose/<%=username%>" method="post">
       <div class="form-group compose-edit-form">
         <label>Title</label>
         <input required class="form-control" placeholder="Title of your blog" type="text" name="postTitle">

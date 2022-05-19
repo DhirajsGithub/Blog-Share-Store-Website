@@ -1,48 +1,69 @@
 <%- include("partials/header", {count:count, username:username}); -%>
-<div class="uk-background-muted uk-padding uk-panel">
 
+<div class="feebacks" style="margin:10px 0 40px;">
+  <div class="uk-slider-container-offset-cards" autoplay="true" autoplay-interval="2000" uk-slider>
 
-    <div class="uk-child-width-1-3@m" uk-grid uk-scrollspy="cls: uk-animation-fade; target: .uk-card; delay: 500; repeat: true">
-        <div>
-            <div class="uk-card uk-card-default uk-card-body">
-                <h3 class="uk-card-title">Fade</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div>
-            <div class="uk-card uk-card-default uk-card-body">
-                <h3 class="uk-card-title">Fade</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div>
-            <div class="uk-card uk-card-default uk-card-body">
-                <h3 class="uk-card-title">Fade</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div>
-            <div class="uk-card uk-card-default uk-card-body">
-                <h3 class="uk-card-title">Fade</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div>
-            <div class="uk-card uk-card-default uk-card-body">
-                <h3 class="uk-card-title">Fade</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div>
-            <div class="uk-card uk-card-default uk-card-body">
-                <h3 class="uk-card-title">Fade</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
+    <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1">
+
+        <ul class="uk-slider-items uk-child-width-1-3@s uk-grid">
+         <% feebacks.forEach((feedback, index)=>{ %>
+            <li  >
+              <div style="background: #f8f8f8" class="uk-card uk-card-default">
+                  <div class="uk-card-body">
+                      <h3 class="uk-card-title"><%=feedback.username%></h3>
+                      <p><%=feedback.feedback%></p>
+                  </div>
+              </div>
+          </li>
+        <%  }) %>
+           
+    
+        </ul>
+
+        <a style="color:rgba(255, 19, 19, 0.768) !important; " class="uk-position-center-left uk-position-small" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+        <a style="color:rgba(255, 19, 19, 0.768) !important; " class="uk-position-center-right uk-position-small " href="#" uk-slidenav-next uk-slider-item="next"></a>
+
     </div>
 
+    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+
+</div>
+  
+</div>
 
 
+<div class="uk-background-muted uk-padding uk-panel">
 
+  <div class="feedback" style="margin-bottom: 50px;">
+    <h3>feedback</h3>
+    <form action="/community/feedback/<%=username%>" method="post">
+      <input style="border: 1px solid black;" class="uk-input uk-width-1-2" type="text" placeholder="your feedback here" name="feeback">
+      <button style="padding: 0 10px; margin-left: 10px;" class="uk-button uk-button-primary"><span uk-icon="icon: push; ratio: 1"></span>
+        submit</button>
+
+  </form>
+  </div>
+  <hr>
+
+  <div
+    class="uk-child-width-1-3@m"
+    uk-grid
+    uk-scrollspy="cls: uk-animation-fade; target: .uk-card; delay: 100; repeat: true"
+  >
+    <%users.forEach((user)=>{ %>
+
+    <div>
+      <div class="uk-card uk-card-default uk-card-body">
+        <h3 class="uk-card-title"><%=user.username.slice(0,user.username.length-4).substring(0, 15) %></h3>
+        <span class="uk-label uk-label-danger">Subscribers : <%=user.subscription.length%></span
+        ><br /><br />
+       
+        <span class="uk-label">Total Likes : <%=user.likedBy.length%></span><br /><br />
+        <a class="uk-button uk-button-default" href="/user/public/<%=user.username%>/<%=username%>">Visit</a>
+      </div>
+    </div>
+
+    <% })%>
+  </div>
 </div>
 <%- include("partials/footer"); -%>

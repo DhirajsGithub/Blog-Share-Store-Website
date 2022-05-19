@@ -2,16 +2,52 @@
 <%- include("partials/header", {count:count, username:username}); -%>
 <div class="uk-background-muted uk-padding uk-panel">
   
-  <span style="color: #1abc9c;" uk-icon="icon: home; ratio: 3"></span>
+  <div style="display:flex ; justify-content: space-between;">
+  
+  <div>
+    <span style="color: #1abc9c;" uk-icon="icon: home; ratio: 3"></span>
     <h2><%=username%></h2>
-<!-- <div class="compose-btn" style="text-align: center; padding: 10px;">
-    <a href="/compose/<%=username%>"><button type="button" class="btn btn-primary btn-lg">
-      Compose
-    </button>
-</a>
+  </div>
+  <div class="avatar">
+    <img src="<%=avatar%>" width="100" height="100" ><br>
 
-</div> -->
+    <a href="#modal-overflow" uk-toggle>Choose Avatar</a>
 
+<div id="modal-overflow" uk-modal>
+    <div style="width: 80%;" class="uk-modal-dialog">
+
+        <button class="uk-modal-close-default" type="button" uk-close>Close</button>
+
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Avatars</h2>
+        </div>
+
+        <div style="display:flex; flex-wrap: wrap;" class="uk-modal-body" uk-overflow-auto>
+
+          
+        <%  for (let i=0; i<= 500; i++){ %>
+         
+       
+          <a href="/avatar/https://avatars.dicebear.com/api/adventurer/<%=i%>.svg/<%=username%>">
+            <img style="width:51px ; margin: 10px; border: 1px solid black;" src="https://avatars.dicebear.com/api/adventurer/<%=i%>.svg" width="50" height="50" >
+          </a>
+          <br> 
+      <%    } %>
+   
+        </div>
+
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button class="uk-button uk-button-primary" type="button">Save</button>
+        </div>
+
+    </div>
+</div>
+
+
+  </div>
+
+</div>
 
 
 <form action="/home/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">

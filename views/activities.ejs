@@ -1,0 +1,86 @@
+<%- include("partials/header", {count:count, username:username}); -%>
+<div class="uk-background-muted uk-padding uk-panel">
+
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 30px;">
+
+    <div style="width: 49%; min-height: 500px;" class="uk-panel uk-panel-scrollable">
+        <div class="uk-alert-danger" uk-alert>
+            <h3>Subscriptions</h3>
+        </div>
+        <hr>
+        <ul class="uk-list">
+          <%  subscription.forEach((e)=>{ %>
+                <li style="display: flex;">
+                <h4 style="margin:0 10px ;"><%=e.subscribedBy%></h4>
+                <p style="margin: 5px 0 0  ;">on : <%=e.date%></p>
+                </li>
+                <hr>
+          <%  }) %>
+           
+
+        </ul>
+    </div>
+    <div style="width: 49% ;height: 500px;" class="uk-panel uk-panel-scrollable">
+        <div class="uk-alert-warning" uk-alert>
+            <h3>Subscribed To </h3>
+
+        </div>
+        
+        <ul class="uk-list">
+            <%  subscribedTo.forEach((e)=>{ %>
+                <li style="display: flex;">
+                <h4 style="margin:0 10px ;"><%=e.subscribedTo.slice(0, e.subscribedTo.length-4)%></h4>
+                <p style="margin: 5px 10px 0  ;">on : <%=e.date%></p>
+                <a style="padding: 0 2px;" class="uk-button uk-button-default" href="/remove-sub/<%=e.subscribedTo%>/<%=username%>" uk-tooltip="Unsubscribe this user">
+                <span style="margin: 5px 0 0  ;" uk-icon="icon: close; ratio: 1">unsubscribe</span>
+            </a>
+                </li>
+                <hr>
+          <%  }) %>
+
+
+        </ul>
+    </div>
+</div>
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 30px;">
+    <div style="width: 49%; height: 500px;" class="uk-panel uk-panel-scrollable">
+        <div class="uk-alert-success" uk-alert>
+            <h3>Blogs Liked</h3>
+        </div>
+        <ul class="uk-list">
+
+            <%  likedTo.forEach((e)=>{ %>
+                <li style="display: flex;">
+                <h4 style="margin:0 10px ;"><%=e.blogTitle%></h4>
+                <p style="margin: 5px 0 0  ;">on : <%=e.date%></p>
+                </li>
+            
+                <li style="margin-left: 10px;"> of : <%=e.likedOwner%> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/public/<%=username%>/#<%=e.blogId%>">Visit</a></li>
+                <hr>
+          <%  }) %>
+
+        </ul>
+    </div>
+    <div style="width: 49% ;height: 500px;" class="uk-panel uk-panel-scrollable">
+        <div class="uk-alert-primary" uk-alert>
+            <h3>Comments On</h3>
+        </div>
+        <ul class="uk-list">
+
+            <%  commentTo.forEach((e)=>{ %>
+                <li style="display: flex;">
+                <h4 style="margin:0 10px ;"><%=e.blogTitle%></h4>
+                <p style="margin: 5px 0 0  ;">on : <%=e.date%></p>
+                </li>
+                <li style="margin-left: 10px;"> of : <%=e.blogOwner%> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/public/<%=username%>/#<%=e.blogId%>">Visit</a></li>
+                <hr>
+          <%  }) %>
+
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+<%- include("partials/footer"); -%>
