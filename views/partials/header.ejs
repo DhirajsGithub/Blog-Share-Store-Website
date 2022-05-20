@@ -39,24 +39,24 @@
       </div>
 
     <div class="left-align" style="display: flex !important; justify-content: space-evenly;">
-    <div class="compose-btn" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 20px;">
+    <div uk-tooltip="Compose a New Blog" class="compose-btn" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 30px;">
       <a href="/compose/<%=username%>">  <button style="padding: 2px 10px;" class="uk-button uk-button-primary"><span uk-icon="icon: pencil; ratio: 1.5"></span> Compose
         </button></a> 
     </div>
-    <div class="community-link com-not-link" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 20px;">
-      <a href="/community/<%=username%>"> <span uk-icon="icon: users; ratio: 1.5"></span>&nbsp;COMMUNITY </a></li> </a> 
+    <div uk-tooltip="Community" class="community-link com-not-link" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 30px;">
+      <a href="/community/<%=username%>"> <span uk-icon="icon: users; ratio: 1.5"></span>&nbsp; </a></li> </a> 
     </div>
-    <div class="notification-link com-not-link" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 20px;">
+    <div uk-tooltip="Notifications" class="notification-link com-not-link" style="display: flex ; flex-direction: column; justify-content: center; margin-right: 30px;">
       <span class="uk-badge">1</span><a href="/notification/<%=username%>"> <span uk-icon="icon: bell; ratio: 1.5"></span>&nbsp; </a></li> </a> 
     </div>
     
 
-      <div class="dropdown spin-on-hover"  style=" display: flex ; flex-direction: column; justify-content: center;" >
+      <div  class="dropdown spin-on-hover"  style=" display: flex ; flex-direction: column; justify-content: center;" >
         <div class="uk-inline">
-          <div style="text-align: center;">
+          <div uk-tooltip="Profile" style="text-align: center;">
             <img src="<%=avatar%>" width="50" height="50" >
             <div></div>
-            <span style="margin:0; letter-spacing: 1px;"><%=username.slice(0, username.length-4)%></span><span class="spin-arrow" uk-icon="icon: triangle-right; ratio: 1.5"></span>
+            <span class="username" style="margin:0; letter-spacing: 1px;"><%=username.slice(0, username.length-4)%></span><span class="spin-arrow" uk-icon="icon: triangle-right; ratio: 1.5"></span>
           </div>
          
           <div  uk-dropdown="duration:100; delay-hide:100;" style="padding: 0px;">

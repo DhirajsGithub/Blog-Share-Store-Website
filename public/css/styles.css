@@ -37,6 +37,9 @@ html {
 .spin-on-hover:hover .spin-arrow{
   transition-duration: 0.4s;
   transform: rotate(90deg);
+} 
+.spin-on-hover:hover .username{
+  color:#1abc9c ;
 }
 .spin-on-hover li{
   text-align: start;

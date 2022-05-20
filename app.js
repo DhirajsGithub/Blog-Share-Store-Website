@@ -254,10 +254,11 @@ const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 // public blogs
 app.get("/public/:username", function (req, res) {
   // generating random string for comment to be appear
+  // notBlogBy
 
   if (req.isAuthenticated()) {
     User.findOne({username : req.params.username}, (err, user)=>{
-      // console.log(user.avatar)
+      // console.log(user.subscription)
     
     publicBlog.find({}, (err, blogs) => {
       // counting the likes ???
@@ -282,6 +283,9 @@ app.get("/public/:username", function (req, res) {
 
 app.post("/public/:username", (req, res) => {
   let dateOF = myDate();
+
+
+
   // let's store blog in the public model
 
   const blog = new publicBlog({
@@ -313,9 +317,33 @@ app.post("/public/:username", (req, res) => {
       });
       // blog.save();
       blog.save((err) => {
-        if (!err) {
-          // need to set the notificcatio for it's subscribers
-          res.redirect("/public/" + req.params.username);
+        if (err) {
+          console.log(err)
+        }else{
+        //   User.findOne({username : req.params.username},  (err, user)=>{
+        //     let sub = user.subscription
+             
+        //       User.findOneAndUpdate({username: s.subscribedBy}, {
+        //         $push :{
+        //           notBlogBy : {
+        //             blogId : result.id,
+        //             blogTitle : result.title,
+        //             date: dateOF[0],
+        //             time: dateOF[1],
+        //             owner : req.body.username
+        //           }
+        //         }
+        //       }, (err, success)=>{
+        //         if(err){
+        //           console.log(err)
+        //         }else{
+        //           // need to set the notificcatio for it's subscribers
+        //           res.redirect("/public/" + req.params.username);
+        //         }
+        //       })
+
+        // })
+        res.redirect("/public/" + req.params.username);
         }
       });
     }
@@ -408,6 +436,7 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
         {
           $push: {
             subscription: {
+              owner : owner,
               subscribedBy: reqSub,
               date: date.toLocaleDateString(),
               time: date.toLocaleTimeString(),
@@ -422,6 +451,7 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
               {
                 $push: {
                   subscribedTo: {
+                    owner : reqSub,
                     subscribedTo: owner,
                     date: date.toLocaleDateString(),
                     time: date.toLocaleTimeString(),
