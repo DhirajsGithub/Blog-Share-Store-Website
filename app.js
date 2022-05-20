@@ -51,41 +51,22 @@ const userSchema = new mongoose.Schema({
 
   // owner liked/comment by owner to other user
   commentTo: Array,
-  likedTo: Array,
+  likedTo: Array, 
 
   notSub: Array,
   notLikedBy: Array,
   notCommentBy: Array,
   subRemoved: Array,
+  notBlogBy: Array,
 
-  BlogsBy: Array,
+  avatar: {
+    type: String,
+    default : "https://avatars.dicebear.com/api/avataaars/fdddd.svg"
+  },
 
-  avatar: String,
 });
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("BlogUser", userSchema);
-
-// making a Schema
-// const blogSchema = new mongoose.Schema({
-//   title: {
-//     type: String,
-//     required: true,
-//   },
-//   body: {
-//     type: String,
-//     required: true,
-//   },
-//   date: {
-//     type: String,
-//   },
-//   time: {
-//     type: String,
-//   },
-//   owner: String,
-//   tag: String,
-//   prPb: String,
-  
-// });
 
 // making a Schema for each blog public as well private
 const publicBlogSchema = new mongoose.Schema({
@@ -110,7 +91,10 @@ const publicBlogSchema = new mongoose.Schema({
 
   comments: Array,
   prPb: String,
-  avatar : String
+  avatar : {
+    type: String,
+    default : "https://avatars.dicebear.com/api/avataaars/fdddd.svg"
+  }
 });
 
 // making a collection/model
@@ -188,28 +172,12 @@ app.post("/", function (req, res) {
 
 ///////////////////////////////////////////////////////////////////////
 
-const homeStartingContent =
-  "Lacus vel facilisis volutpat est velit egestas dui id ornare. Semper auctor neque vitae tempus quam. Sit amet cursus sit amet dictum sit amet justo. Viverra tellus in hac habitasse. Imperdiet proin fermentum leo vel orci porta. Donec ultrices tincidunt arcu non sodales neque sodales ut. Mattis molestie a iaculis at erat pellentesque adipiscing. Magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies. Adipiscing elit ut aliquam purus sit amet luctus venenatis lectus. Ultrices vitae auctor eu augue ut lectus arcu bibendum at. Odio euismod lacinia at quis risus sed vulputate odio ut. Cursus mattis molestie a iaculis at erat pellentesque adipiscing.";
-const aboutContent =
-  "Hac habitasse platea dictumst vestibulum rhoncus est pellentesque. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Non diam phasellus vestibulum lorem sed. Platea dictumst quisque sagittis purus sit. Egestas sed sed risus pretium quam vulputate dignissim suspendisse. Mauris in aliquam sem fringilla. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Amet massa vitae tortor condimentum lacinia quis vel eros. Enim ut tellus elementum sagittis vitae. Mauris ultrices eros in cursus turpis massa tincidunt dui.";
-const contactContent =
-  "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
-
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use("*/images", express.static("public/images"));
 
 // how to deal with two submit button in one form i can't figure it our hence created two forms one page directing to differnet post route
-
-// checking for authentication of home/username
-// app.get("/secrets", (req, res)=>{
-//   if(req.isAuthenticated()){
-//       res.render("secrets")
-//   }else{
-//       res.redirect("/login")
-//   }
-// })
 // personal blogs of a user
 app.get("/home/:username", function (req, res) {
   if (req.isAuthenticated()) {
@@ -223,7 +191,6 @@ app.get("/home/:username", function (req, res) {
           res.render("home", {
             avatar : user.avatar,
             username: req.params.username,
-            startingContent: homeStartingContent,
             posts: blogs,
             count: blogs.length + "-Blogs",
           });
@@ -255,10 +222,11 @@ app.get("/public/:username", function (req, res) {
       // console.log(blogs[0].id)
       if (!err) {
         res.render("public", {
+          avatar : user.avatar,
           count: "Trending",
           username: req.params.username,
           posts: blogs,
-          avatar : user.avatar
+          
         });
       }
     });
@@ -368,7 +336,8 @@ app.get("/user/public/:postOwner/:username", (req, res) => {
           blogsCount: blogs.length,
           posts: blogs,
           username: req.params.username,
-          avatar : user1.avatar
+          avatar : user1.avatar,
+          avatarOwn : user.avatar
         });
       });
     });
@@ -1183,10 +1152,10 @@ app.get("/remove-sub/:sub/:username", (req, res) => {
 
 // setting up the avatar thing
 
-app.get("/avatar/https://avatars.dicebear.com/api/adventurer/:link.svg/:username", (req, res) => {
+app.get("/avatar/https://avatars.dicebear.com/api/avataaars/:link.svg/:username", (req, res) => {
   // res.send(req.link, +'sdf');
   const link = req.params.link
-  const avatar = `https://avatars.dicebear.com/api/adventurer/${link}.svg`
+  const avatar = `https://avatars.dicebear.com/api/avataaars/${link}.svg`
   User.findOneAndUpdate({username:req.params.username}, {
     avatar : avatar
   }, (err, success)=>{
