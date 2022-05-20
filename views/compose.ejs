@@ -5,19 +5,21 @@
       <div class="form-group compose-edit-form">
         <label>Title</label>
         <input required class="form-control" placeholder="Title of your blog" type="text" name="postTitle">
-        <label>Tags</label>
-          <input required list="browsers" class="form-control" placeholder="blog tag" type="text" name="postTag" value="none" />
-          <datalist id="browsers">
-            <option value="Chrome">
-            <option value="Firefox">
-            <option value="Internet Explorer">
-            <option value="Opera">
-            <option value="Safari">
-            <option value="Microsoft Edge">
+        <label>Category</label>
+          <input required list="categories" class="form-control" placeholder="blog categories" type="text" name="postTag"  />
+          <datalist id="categories">
+            <option value="None">
+            <option value="Travel">
+            <option value="Food">
+            <option value="Fitness">
+            <option value="Lifestyle">
+            <option value="Photography">
+            <option value="Fashion">
+            <option value="Health">
           </datalist>
 
         <label>Post</label>
-        <textarea required class="form-control" name="postBody" rows="13" cols="30" placeholder="minimum 100 words"></textarea>
+        <textarea required class="form-control" name="postBody" rows="13" cols="30" placeholder="Write your blog here minimum 100 words"></textarea>
       </div>
       <input type="text" hidden name="username" value="<%=username%>">
       <div style="display: flex; justify-content: space-evenly; margin-top: 60px; margin-bottom: 20px;">

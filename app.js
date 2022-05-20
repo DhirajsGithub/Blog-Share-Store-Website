@@ -40,28 +40,60 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   // the users which subscribed to owner
-  subscription: Array,
+  subscription: {
+    type: Array,
+    default : []
+  },
 
   // the owner which subscribe to other user
-  subscribedTo: Array,
-
+  subscribedTo: {
+    type: Array,
+    default : []
+  },
   // posts liked/comment by other user to the owner
-  likedBy: Array,
-  commentBy: Array,
+  likedBy: {
+    type: Array,
+    default : []
+  },
+  commentBy: {
+    type: Array,
+    default : []
+  },
 
   // owner liked/comment by owner to other user
-  commentTo: Array,
-  likedTo: Array, 
+  commentTo:{
+    type: Array,
+    default : []
+  },
+  likedTo: {
+    type: Array,
+    default : []
+  },
 
-  notSub: Array,
-  notLikedBy: Array,
-  notCommentBy: Array,
-  subRemoved: Array,
-  notBlogBy: Array,
+  notSub: {
+    type: Array,
+    default : []
+  },
+  notLikedBy: {
+    type: Array,
+    default : []
+  },
+  notCommentBy: {
+    type: Array,
+    default : []
+  },
+  subRemoved: {
+    type: Array,
+    default : []
+  },
+  notBlogBy: {
+    type: Array,
+    default : []
+  },
 
   avatar: {
-    type: String,
-    default : "https://avatars.dicebear.com/api/avataaars/fdddd.svg"
+    default : "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
+    type : String
   },
 
 });
@@ -85,16 +117,25 @@ const publicBlogSchema = new mongoose.Schema({
     type: String,
   },
   owner: String,
-  tag: String,
+  tag: {
+    type : String,
+    default: "tag"
+  },
 
-  like: Array,
+  like: {
+    type: Array,
+    default : []
+  },
 
-  comments: Array,
+  comments: {
+    type: Array,
+    default : []
+  },
   prPb: String,
-  avatar : {
-    type: String,
-    default : "https://avatars.dicebear.com/api/avataaars/fdddd.svg"
-  }
+  avatar: {
+    default : "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
+    type : String
+  },
 });
 
 // making a collection/model
@@ -216,11 +257,14 @@ app.get("/public/:username", function (req, res) {
 
   if (req.isAuthenticated()) {
     User.findOne({username : req.params.username}, (err, user)=>{
+      // console.log(user.avatar)
     
     publicBlog.find({}, (err, blogs) => {
       // counting the likes ???
       // console.log(blogs[0].id)
-      if (!err) {
+      if (err) {
+        console.log(err)
+      }else{
         res.render("public", {
           avatar : user.avatar,
           count: "Trending",
@@ -620,7 +664,8 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
 app.get("/notification/private/:username", (req, res) => {
   if (req.isAuthenticated()) {
     User.findOne({ username: req.params.username }, (err, docs) => {
-      console.log(docs);
+      // console.log(docs);
+
       res.render("notification", {
         count: "Notifications",
         username: req.params.username,
@@ -973,7 +1018,7 @@ app.post("/community/feedback/:username", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(feeback);
+      // console.log(feeback);
       res.redirect("/community/" + req.params.username);
     }
   });
