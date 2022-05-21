@@ -320,30 +320,24 @@ app.post("/public/:username", (req, res) => {
         if (err) {
           console.log(err)
         }else{
-        //   User.findOne({username : req.params.username},  (err, user)=>{
-        //     let sub = user.subscription
-             
-        //       User.findOneAndUpdate({username: s.subscribedBy}, {
-        //         $push :{
-        //           notBlogBy : {
-        //             blogId : result.id,
-        //             blogTitle : result.title,
-        //             date: dateOF[0],
-        //             time: dateOF[1],
-        //             owner : req.body.username
-        //           }
-        //         }
-        //       }, (err, success)=>{
-        //         if(err){
-        //           console.log(err)
-        //         }else{
-        //           // need to set the notificcatio for it's subscribers
-        //           res.redirect("/public/" + req.params.username);
-        //         }
-        //       })
-
-        // })
-        res.redirect("/public/" + req.params.username);
+        User.findOneAndUpdate({username: req.params.username}, {
+          $push :{
+            notBlogBy : {
+              blogId : result.id,
+              blogTitle : result.title,
+              date: dateOF[0],
+              time: dateOF[1],
+              owner : req.body.username
+            }
+          }
+        }, (err, success)=>{
+          if(err){
+            console.log(err)
+          }else{
+            // need to set the notificcatio for it's subscribers
+            res.redirect("/public/" + req.params.username);
+          }
+        })
         }
       });
     }
