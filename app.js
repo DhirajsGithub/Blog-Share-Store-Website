@@ -136,6 +136,11 @@ const publicBlogSchema = new mongoose.Schema({
     default : "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
     type : String
   },
+
+  uniqueC : {
+    default : '',
+    type : String
+  }
 });
 
 // making a collection/model
@@ -188,7 +193,6 @@ app.post("/register", (req, res) => {
   );
 });
 
-const userN = [];
 app.post("/", function (req, res) {
   // https://www.passportjs.org/
   // this must be like the data store in our DB
@@ -199,7 +203,7 @@ app.post("/", function (req, res) {
 
   req.login(user, function (err) {
     if (err) {
-      console.log(err);
+      console.log("shit");
     } else {
       passport.authenticate("local")(req, res, function () {
         // console.log(user)
@@ -230,7 +234,7 @@ app.get("/home/:username", function (req, res) {
           console.log("error occur");
         } else {
           res.render("home", {
-            avatar : user.avatar,
+            avatar : user ? user.avatar : '',
             username: req.params.username,
             posts: blogs,
             count: blogs.length + "-Blogs",
@@ -253,8 +257,6 @@ const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 
 // public blogs
 app.get("/public/:username", function (req, res) {
-  // generating random string for comment to be appear
-  // notBlogBy
 
   if (req.isAuthenticated()) {
     User.findOne({username : req.params.username}, (err, user)=>{
@@ -267,7 +269,7 @@ app.get("/public/:username", function (req, res) {
         console.log(err)
       }else{
         res.render("public", {
-          avatar : user.avatar,
+          avatar : user ? user.avatar : '' ,
           count: "Trending",
           username: req.params.username,
           posts: blogs,
@@ -284,8 +286,19 @@ app.get("/public/:username", function (req, res) {
 app.post("/public/:username", (req, res) => {
   let dateOF = myDate();
 
+  function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzzzzjksfksfnjfiewjfdsiuendsfjkeSSSKJIUFWIKJ";
+  
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
+  }
 
 
+  User.findOne({username : req.params.username}, (err, user1)=>{
+ 
   // let's store blog in the public model
 
   const blog = new publicBlog({
@@ -296,6 +309,8 @@ app.post("/public/:username", (req, res) => {
     owner: req.body.username,
     tag: req.body.postTag,
     prPb: req.body.public,
+    avatar : user1.avatar,
+    uniqueC : makeid()
   });
 
   blog.save((err, result) => {
@@ -314,6 +329,8 @@ app.post("/public/:username", (req, res) => {
         owner: req.body.username,
         tag: req.body.postTag,
         prPb: req.body.public,
+        avatar : user1.avatar,
+        uniqueC : makeid()
       });
       // blog.save();
       blog.save((err) => {
@@ -343,6 +360,7 @@ app.post("/public/:username", (req, res) => {
     }
   });
 });
+});
 
 app.get("/public-posts/:blogId/:username", (req, res) => {
   if (req.isAuthenticated()) {
@@ -356,7 +374,7 @@ app.get("/public-posts/:blogId/:username", (req, res) => {
           content: blog.body,
           count: "Public",
           owner: blog.owner,
-          avatar : user.avatar
+          avatar : user ? user.avatar : ''
         });
       });
     })
@@ -366,27 +384,27 @@ app.get("/public-posts/:blogId/:username", (req, res) => {
   }
 });
 
-app.get("/public-posts/:blogId/:username", (req, res) => {
-  if (req.isAuthenticated()) {
-    const reqPublicBlogId = req.params.blogId;
-    User.findOne({username: req.params.username}, (err, user)=>{
+// app.get("/public-posts/:blogId/:username", (req, res) => {
+//   if (req.isAuthenticated()) {
+//     const reqPublicBlogId = req.params.blogId;
+//     User.findOne({username: req.params.username}, (err, user)=>{
     
-    publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
-      res.render("publicPost", {
-        username: req.params.username,
-        title: blog.title,
-        tag: blog.tag,
-        content: blog.body,
-        count: "Public",
-        owner: blog.owner,
-        avatar: user.avatar
-      });
-    });
-  });
-  } else {
-    res.redirect("/");
-  }
-});
+//     publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
+//       res.render("publicPost", {
+//         username: req.params.username,
+//         title: blog.title,
+//         tag: blog.tag,
+//         content: blog.body,
+//         count: "Public",
+//         owner: blog.owner,
+//         avatar: user.avatar
+//       });
+//     });
+//   });
+//   } else {
+//     res.redirect("/");
+//   }
+// });
 app.get("/user/public/:postOwner/:username", (req, res) => {
   if (req.isAuthenticated()) {
     const reqUser = req.params.postOwner;
@@ -402,8 +420,8 @@ app.get("/user/public/:postOwner/:username", (req, res) => {
           blogsCount: blogs.length,
           posts: blogs,
           username: req.params.username,
-          avatar : user1.avatar,
-          avatarOwn : user.avatar
+          avatar : user1 ? user1.avatar : "",
+          avatarOwn : user ? user.avatar : ""
         });
       });
     });
@@ -694,7 +712,7 @@ app.get("/notification/private/:username", (req, res) => {
         count: "Notifications",
         username: req.params.username,
         user: docs,
-        avatar : docs.avatar
+        avatar : docs ? docs.avatar : ''
       });
     });
   } else {
@@ -712,7 +730,7 @@ app.get("/compose/:username", function (req, res) {
     res.render("compose", { 
     count: "compose", 
     username: req.params.username,
-    avatar : user.avatar
+    avatar : user ? user.avatar : ''
    });
   });
   } else {
@@ -729,6 +747,17 @@ function myDate() {
 // user can compose a blog add it as personal or personal+private
 app.post("/compose/:username", function (req, res) {
   // adding the last modified feature
+  function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzzzzjksfksfnjfiewjfdsiuendsfjkeSSSKJIUFWIKJ";
+  
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
+  }
+
+  User.findOne({username: req.params.username}, (err, user1)=>{
 
   let dateOF = myDate();
   // let's store blog with same title as well
@@ -740,6 +769,8 @@ app.post("/compose/:username", function (req, res) {
     owner: req.body.username,
     tag: req.body.postTag.length === 0 ? "none" : req.body.postTag,
     prPb: req.body.private,
+    avatar : user1.avatar,
+    uniqueC : makeid()
   });
   // blog.save();
   blog.save((err) => {
@@ -747,6 +778,7 @@ app.post("/compose/:username", function (req, res) {
       res.redirect("/home/" + req.body.username);
     }
   });
+});
 });
 
 // user can view a blog by clicking on the Read More button
@@ -772,7 +804,7 @@ app.get("/posts/:blogId/:username", function (req, res) {
           count: blog.prPb,
           tag: blog.tag,
           display: blog.prPb == "private" ? "block" : "none",
-          avatar : user.avatar
+          avatar : user ? user.avatar : ''
         });
       }
     });
@@ -802,6 +834,8 @@ app.post("/home/:username", (req, res) => {
       owner: req.params.username,
       tag: trash.tag,
       prPb: trash.prPb,
+      avatar : trash.avatar,
+      uniqueC : trash.uniqueC
     });
     trashBlog.save();
 
@@ -828,7 +862,7 @@ app.get("/trash/:username", function (req, res) {
           posts: blogs,
           count: blogs.length + "-Trashes",
           username: req.params.username,
-          avatar : user.avatar
+          avatar : user ? user.avatar : ''
         
         });
       }
@@ -860,6 +894,8 @@ app.post("/trash/:username", (req, res) => {
         owner: req.params.username,
         tag: blog.tag,
         prPb: blog.prPb,
+        avatar : blog.avatar,
+        uniqueC : blog.uniqueC
       });
       post.save(err);
     }
@@ -903,7 +939,7 @@ app.get("/editBlog/:blogId/:username", (req, res) => {
           count: "edit",
           tag: docs.tag,
           prPb: docs.prPb,
-          avatar : user.avatar
+          avatar : user ? user.avatar : ''
         });
       }
     });
@@ -968,6 +1004,17 @@ app.post("/editBlog/:username", (req, res) => {
 // making private blog to public blog
 app.get("/pr-to-pb/:blogId/:username", (req, res) => {
   if (req.isAuthenticated()) {
+
+    // function makeid() {
+    //   var text = "";
+    //   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    
+    //   for (var i = 0; i < 5; i++)
+    //     text += possible.charAt(Math.floor(Math.random() * possible.length));
+    
+    //   return text;
+    // }
+
     const reqBlog = req.params.blogId;
     const onwner = req.params.owner;
     let dateOF = myDate();
@@ -986,6 +1033,8 @@ app.get("/pr-to-pb/:blogId/:username", (req, res) => {
           owner: docs.owner,
           tag: docs.tag,
           prPb: "public",
+          avatar : docs.avatar,
+          uniqueC : docs.uniqueC
         });
         blog.save((err) => {
           if (err) {
@@ -1015,7 +1064,7 @@ app.get("/community/:username", (req, res) => {
           count: "community",
           username: req.params.username,
           feebacks: feebacks,
-          avatar : user.avatar
+          avatar : user ? user.avatar : ''
         });
       });
     }).sort("-likedBy.length");
@@ -1056,11 +1105,11 @@ app.get("/notification/:username/", (req, res) => {
         user: user,
         count: "Notify",
         username: req.params.username,
-        subscription: user.notSub && user.notSub.reverse(),
-        likeBy: user.notLikedBy && user.notLikedBy.reverse(),
-        commentBy: user.notCommentBy && user.notCommentBy.reverse(),
-        subRemoved: user.subRemoved && user.subRemoved.reverse(),
-        avatar : user.avatar
+        subscription: user.notSub ? user.notSub.reverse():"",
+        likeBy: user.notLikedBy ? user.notLikedBy.reverse():"",
+        commentBy: user.notCommentBy ? user.notCommentBy.reverse():"",
+        subRemoved: user.subRemoved? user.subRemoved.reverse():"",
+        avatar : user ? user.avatar : ''
       });
     }
   });
@@ -1151,11 +1200,11 @@ app.get("/activities/:username", (req, res) => {
     res.render("activities", {
       count: "activities",
       username: req.params.username,
-      likedTo: user.likedTo && user.likedTo.reverse(),
-      commentTo: user.commentTo && user.commentTo.reverse(),
-      subscription: user.subscription && user.subscription.reverse(),
-      subscribedTo: user.subscribedTo && user.subscribedTo.reverse(),
-      avatar : user.avatar
+      likedTo: user.likedTo ?  user.likedTo.reverse() : '',
+      commentTo: user.commentTo ? user.commentTo.reverse() :'',
+      subscription: user.subscription ? user.subscription.reverse() :'',
+      subscribedTo: user.subscribedTo ? user.subscribedTo.reverse() :'',
+      avatar : user ? user.avatar : ''
     });
   });
 });

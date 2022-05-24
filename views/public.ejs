@@ -7,7 +7,7 @@ posts.forEach(function(post, index){ %>
   </div>
 
 <div
- class="uk-animation-scale-grow"
+ 
   style="
     text-align: center !important;
     margin: 0 auto !important;
@@ -84,17 +84,17 @@ posts.forEach(function(post, index){ %>
           "
           class="uk-button uk-button-primary hover-blue"
           type="button"
-          uk-toggle="target: #<%=post.title%>; animation: uk-animation-fade"
+          uk-toggle="target: #<%=post.uniqueC%>; animation: uk-animation-fade"
           uk-tooltip="Comments"
         >
           <span uk-icon="icon: comments; ratio: 1.5"></span>
         </button>
 
-        <p style="float: right" id="<%=post.title%>" hidden>
+        <p style="float: right" id="<%=post.uniqueC%>" hidden>
           Comments<span uk-icon="icon:  triangle-down; ratio: 2"></span>
         </p>
         <div
-          id="<%=post.title%>"
+          id="<%=post.uniqueC%>"
           hidden
           style="
             z-index: 88 !important;
