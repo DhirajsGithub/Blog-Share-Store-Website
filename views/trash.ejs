@@ -8,25 +8,17 @@
    <span style="color: rgb(252, 71, 71);" uk-icon="icon: trash; ratio: 3"></span>
     <h2><%=username%></h2>
 
-
+    <%if (posts.length === 0){%>
+      <div style="text-align: center;">
+        <h3>Trash is Empty !!!</h3>
+      </div>
+     
+      <%} %>
 
 <form action="/home/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">
-
+  
   <%  posts.forEach(function(post, index){ %>
-<!-- <a class="my-card" href="/posts/<%=post._id%>/<%=username%>">
-    <div class="card main-card" style="width: 180px !important; margin: 20px; "> 
-      <img src="../public/images/blog.png" width="60px" style="border-radius:100% ;" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h2><%=post.title.substring(0, 10)%></h2>
-        <h5><%=post.body.substring(0, 100) + " ..."%> 
-      </h5>
-      <h6 style="color: rgb(255, 66, 66); font-size: large;"><%=post.tag%></h6>
-        
-     <span><%=post.date%> <%=post.time%></span> <span class="trashBin" style="margin-left: 10px;"><button type="submit" name="trashBtn" value="<%=post._id%>"><i class="fa-solid fa-recycle"></i></button></span>
-     
-      </div>
-      </div>
-    </a> -->
+
 <div class="uk-animation-toggle " style=" margin:20px auto;" tabindex="0">
       <div class="uk-animation-scale-grow">
     <div class="uk-card uk-card-default uk-width-1-2@m" style="width:240px;">

@@ -84,17 +84,17 @@ posts.forEach(function(post, index){ %>
           "
           class="uk-button uk-button-primary hover-blue"
           type="button"
-          uk-toggle="target: #<%=post.uniqueC%>; animation: uk-animation-fade"
+          uk-toggle="target: #<%='a'+post.id%>; animation: uk-animation-fade"
           uk-tooltip="Comments"
         >
           <span uk-icon="icon: comments; ratio: 1.5"></span>
         </button>
 
-        <p style="float: right" id="<%=post.uniqueC%>" hidden>
+        <p style="float: right" id="<%='a'+post.id%>" hidden>
           Comments<span uk-icon="icon:  triangle-down; ratio: 2"></span>
         </p>
         <div
-          id="<%=post.uniqueC%>"
+          id="<%='a'+post.id%>"
           hidden
           style="
             z-index: 88 !important;

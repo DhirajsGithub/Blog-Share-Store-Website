@@ -24,6 +24,14 @@
   </div>
  
   <h3>Public Posts</h3>
+
+  <%if (posts.length === 0){%>
+    <div style="text-align: center;">
+      <h3>Your Blog folder is Empty !!!</h3>
+      <a href="/compose/<%=username%>">Compose a new Blog</a>
+    </div>
+   
+    <%} %>
     
 
 <form action="/home/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">

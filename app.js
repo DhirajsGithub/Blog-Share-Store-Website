@@ -137,10 +137,7 @@ const publicBlogSchema = new mongoose.Schema({
     type : String
   },
 
-  uniqueC : {
-    default : '',
-    type : String
-  }
+
 });
 
 // making a collection/model
@@ -276,7 +273,7 @@ app.get("/public/:username", function (req, res) {
           
         });
       }
-    });
+    }).sort("-like.length") ;
   })
   } else {
     res.redirect("/");
@@ -285,16 +282,6 @@ app.get("/public/:username", function (req, res) {
 
 app.post("/public/:username", (req, res) => {
   let dateOF = myDate();
-
-  function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzzzzjksfksfnjfiewjfdsiuendsfjkeSSSKJIUFWIKJ";
-  
-    for (var i = 0; i < 5; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return text;
-  }
 
 
   User.findOne({username : req.params.username}, (err, user1)=>{
@@ -310,7 +297,6 @@ app.post("/public/:username", (req, res) => {
     tag: req.body.postTag,
     prPb: req.body.public,
     avatar : user1.avatar,
-    uniqueC : makeid()
   });
 
   blog.save((err, result) => {
@@ -330,7 +316,7 @@ app.post("/public/:username", (req, res) => {
         tag: req.body.postTag,
         prPb: req.body.public,
         avatar : user1.avatar,
-        uniqueC : makeid()
+      
       });
       // blog.save();
       blog.save((err) => {
@@ -747,16 +733,6 @@ function myDate() {
 // user can compose a blog add it as personal or personal+private
 app.post("/compose/:username", function (req, res) {
   // adding the last modified feature
-  function makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzzzzjksfksfnjfiewjfdsiuendsfjkeSSSKJIUFWIKJ";
-  
-    for (var i = 0; i < 5; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return text;
-  }
-
   User.findOne({username: req.params.username}, (err, user1)=>{
 
   let dateOF = myDate();
@@ -770,7 +746,7 @@ app.post("/compose/:username", function (req, res) {
     tag: req.body.postTag.length === 0 ? "none" : req.body.postTag,
     prPb: req.body.private,
     avatar : user1.avatar,
-    uniqueC : makeid()
+   
   });
   // blog.save();
   blog.save((err) => {
@@ -835,7 +811,7 @@ app.post("/home/:username", (req, res) => {
       tag: trash.tag,
       prPb: trash.prPb,
       avatar : trash.avatar,
-      uniqueC : trash.uniqueC
+     
     });
     trashBlog.save();
 
@@ -895,7 +871,7 @@ app.post("/trash/:username", (req, res) => {
         tag: blog.tag,
         prPb: blog.prPb,
         avatar : blog.avatar,
-        uniqueC : blog.uniqueC
+  
       });
       post.save(err);
     }
@@ -1005,15 +981,6 @@ app.post("/editBlog/:username", (req, res) => {
 app.get("/pr-to-pb/:blogId/:username", (req, res) => {
   if (req.isAuthenticated()) {
 
-    // function makeid() {
-    //   var text = "";
-    //   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    
-    //   for (var i = 0; i < 5; i++)
-    //     text += possible.charAt(Math.floor(Math.random() * possible.length));
-    
-    //   return text;
-    // }
 
     const reqBlog = req.params.blogId;
     const onwner = req.params.owner;
@@ -1034,7 +1001,7 @@ app.get("/pr-to-pb/:blogId/:username", (req, res) => {
           tag: docs.tag,
           prPb: "public",
           avatar : docs.avatar,
-          uniqueC : docs.uniqueC
+         
         });
         blog.save((err) => {
           if (err) {
@@ -1066,8 +1033,8 @@ app.get("/community/:username", (req, res) => {
           feebacks: feebacks,
           avatar : user ? user.avatar : ''
         });
-      });
-    }).sort("-likedBy.length");
+      }).sort({subscription : -1});
+    })
   })
   } else {
     res.redirect("/");
