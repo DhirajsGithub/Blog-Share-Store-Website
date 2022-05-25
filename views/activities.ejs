@@ -11,7 +11,7 @@
         <ul class="uk-list">
           <%  subscription.forEach((e)=>{ %>
                 <li style="display: flex;">
-                <h4 style="margin:0 10px ;"><%=e.subscribedBy%></h4>
+                <h4 style="margin:0 10px ;"><%=e.subscribedBy.slice(0, e.subscribedBy.length-4).substring(0,20)%></h4>
                 <p style="margin: 5px 0 0  ;">on : <%=e.date%></p>
                 </li>
                 <hr>
@@ -29,7 +29,7 @@
         <ul class="uk-list">
             <%  subscribedTo.forEach((e)=>{ %>
                 <li style="display: flex;">
-                <h4 style="margin:0 10px ;"><%=e.subscribedTo.slice(0, e.subscribedTo.length-4)%></h4>
+                <h4 style="margin:0 10px ;"><%=e.subscribedTo.slice(0, e.subscribedTo.length-4).substring(0,20)%></h4>
                 <p style="margin: 5px 10px 0  ;">on : <%=e.date%></p>
                 <a style="padding: 0 2px;" class="uk-button uk-button-default" href="/remove-sub/<%=e.subscribedTo%>/<%=username%>" uk-tooltip="Unsubscribe this user">
                 <span style="margin: 5px 0 0  ;" uk-icon="icon: close; ratio: 1">unsubscribe</span>
@@ -51,11 +51,11 @@
 
             <%  likedTo.forEach((e)=>{ %>
                 <li style="display: flex;">
-                <h4 style="margin:0 10px ;"><%=e.blogTitle%></h4>
+                <h4 style="margin:0 10px ;"><%=e.blogTitle.substring(0,20)%></h4>
                 <p style="margin: 5px 0 0  ;">on : <%=e.date%></p>
                 </li>
             
-                <li style="margin-left: 10px;"> of : <%=e.likedOwner%> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/public/<%=username%>/#<%=e.blogId%>">Visit</a></li>
+                <li style="margin-left: 10px;"> of : <%=e.likedOwner.slice(0, e.likedOwner.length-4).substring(0,20)%> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/public/<%=username%>/#<%=e.blogId%>">Visit</a></li>
                 <hr>
           <%  }) %>
 
@@ -69,10 +69,10 @@
 
             <%  commentTo.forEach((e)=>{ %>
                 <li style="display: flex;">
-                <h4 style="margin:0 10px ;"><%=e.blogTitle%></h4>
+                <h4 style="margin:0 10px ;"><%=e.blogTitle.substring(0,20)%></h4>
                 <p style="margin: 5px 0 0  ;">on : <%=e.date%></p>
                 </li>
-                <li style="margin-left: 10px;"> of : <%=e.blogOwner%> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/public/<%=username%>/#<%=e.blogId%>">Visit</a></li>
+                <li style="margin-left: 10px;"> of : <%=e.blogOwner.slice(0, e.blogOwner.length-4).substring(0,20)%> &nbsp;&nbsp;&nbsp;&nbsp; <a href="/public/<%=username%>/#<%=e.blogId%>">Visit</a></li>
                 <hr>
           <%  }) %>
 

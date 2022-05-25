@@ -7,7 +7,7 @@
         <div>
 
         
-        <h4 ><%=subscribe.subscribedBy.substring(0,15) %> &nbsp; : &nbsp; Subscribed To Your Blogs </h4>
+        <h4 ><%=subscribe.subscribedBy.substring(0,20) %> &nbsp; : &nbsp; Subscribed To Your Blogs </h4>
         <p >On: <%=subscribe.date%> | <%=subscribe.time%></p>
     </div>
     
@@ -21,7 +21,7 @@
         <div>
 
         
-        <h4 ><%=e.subRemoved.substring(0,15)%> &nbsp; : &nbsp; Removed Subscription from your Blogs </h4>
+        <h4 ><%=e.subRemoved.substring(0,20)%> &nbsp; : &nbsp; Removed Subscription from your Blogs </h4>
         <p >On: <%=e.date%> | <%=e.time%></p>
     </div>
     
@@ -30,26 +30,30 @@
   <%  }) %>
 
   <% commentBy.forEach((comment)=>{ %>
+    <a href="/public/<%=username%>/#<%=comment.blogId%>">
   <div style="display:flex ; justify-content: space-between;" class="uk-alert-primary" uk-alert>
     <div>
-    <h4><%=comment.commentBy.substring(0,15)%> &nbsp; : &nbsp; Commented on Your Blog <a href="/public/<%=username%>/#<%=comment.blogId%>"><span style="border-bottom:1px dashed black ;"> <%=comment.blogTitle.substring(0,25)%> </span></a></h4>
+    <h4><%=comment.commentBy.substring(0,20)%> &nbsp; : &nbsp; Commented on Your Blog <span style="border-bottom:1px dashed black ;"> <%=comment.blogTitle.substring(0,25)%> </span></h4>
     <p>On: <%=comment.date%> | <%=comment.time%></p>
 </div>
 <a style="height: 40px;" class="uk-button uk-button-default" href="/delete/comments/<%=comment.commentBy%>/<%=comment.blogTitle%>/<%=username%>">Delete</a>
-
+</a>
 </div>
  <%  }) %>
 
  <% likeBy.forEach((like)=>{ %>
+    <a href="/public/<%=username%>/#<%=like.blogId%>">
  <div style="display:flex ; justify-content: space-between;" class="uk-alert-success" uk-alert>
     <div>
-    <h4><%=like.likedBy.substring(0,15)%> &nbsp; : &nbsp; like Your Blog <a href="/public/<%=username%>/#<%=like.blogId%>"> <span style="border-bottom:1px dashed black ;"><%=like.blogTitle.substring(0,25)%></span></a> </h4>
+    <h4><%=like.likedBy.substring(0,20)%> &nbsp; : &nbsp; like Your Blog  <span style="border-bottom:1px dashed black ;"><%=like.blogTitle.substring(0,25)%></span> </h4>
     <p>On:  <%=like.date%> | <%=like.time%></p>
 
 </div>
+
 <a style="height: 40px;" class="uk-button uk-button-default" href="/delete/likes/<%=like.likedBy%>/<%=username%>">Delete</a>
 
 </div>
+</a>
 <%  }) %>
 
 <!-- <% user.likedBy.forEach((like)=>{ %> -->

@@ -27,7 +27,7 @@
               <div class="uk-width-auto">
               </div>
               <div class="uk-width-expand" >
-                  <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 10)%></h3>
+                  <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 15)%></h3>
                   <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00"><%=post.date%> &nbsp;  |&nbsp;  <%=post.time%></time></p>
                   <span class="uk-label uk-label-danger"><%=post.tag.substring(0, 10)%></span>
                   <span style="font-size:14px; float: right;" class="uk-badge"><%=post.prPb%></span>
@@ -35,8 +35,8 @@
           </div>
       </div>
       <div class="uk-card-body" style="height:150px !important; padding: 20px;">
-        <%  if (post.body.length >= 150){ %>
-          <p><%=post.body.substring(0, 150) + " ..."%> </p>
+        <%  if (post.body.length >= 130){ %>
+          <p><%=post.body.substring(0, 130) + " ..."%> </p>
       <%  }else{ %>
         <p><%=post.body%> </p>
     <%    } %>

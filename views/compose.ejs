@@ -3,10 +3,10 @@
     <h1>Compose</h1>
     <form class="" action="/compose/<%=username%>" method="post">
       <div class="form-group compose-edit-form">
-        <label>Title</label>
+        <label style="letter-spacing: 1px; font-size: larger;">Title</label>
         <input required class="form-control" placeholder="Title of your blog" type="text" name="postTitle">
-        <label>Category</label>
-          <input required list="categories" class="form-control" placeholder="blog categories" type="text" name="postTag"  />
+        <label style="letter-spacing: 1px; font-size: larger;">Category</label>
+          <input required list="categories" class="form-control" placeholder="blog categorie" type="text" name="postTag"  />
           <datalist id="categories">
             <option value="None">
             <option value="Travel">
@@ -16,10 +16,12 @@
             <option value="Photography">
             <option value="Fashion">
             <option value="Health">
+            <option value="Multimedia">
+            <option value="News">
           </datalist>
 
-        <label>Post</label>
-        <textarea required class="form-control" name="postBody" rows="13" cols="30" placeholder="Write your blog here minimum 100 words"></textarea>
+          <label style="letter-spacing: 1px; font-size: larger;">Body</label>
+          <textarea required class="form-control" name="postBody" rows="13" cols="30" placeholder="Write your blog here minimum 100 words"></textarea>
       </div>
       <input type="text" hidden name="username" value="<%=username%>">
       <div style="display: flex; justify-content: space-evenly; margin-top: 60px; margin-bottom: 20px;">

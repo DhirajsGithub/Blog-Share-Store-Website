@@ -5,8 +5,8 @@
   <div style="display:flex ; justify-content: space-between;">
   
   <div style="display: flex ;">
-    <span style="color: #1abc9c; margin: auto 0;" uk-icon="icon: home; ratio: 3"></span>
-    <div style="margin: auto 40px;">
+    <span uk-tooltip="Your Personal as well Private Blogs will be appear here" style="color: #1abc9c; margin: auto 0;" uk-icon="icon: home; ratio: 3"></span>
+    <div uk-tooltip="Your Personal as well Private Blogs will appear here" style="margin: auto 40px;">
       <h4 style="margin: 0;">Hey there !</h4>
     <h2 style="margin: 0;"><%=username.slice(0,username.length-4).substring(0,20)%></h2>
     </div>
@@ -62,24 +62,9 @@
  
   <%} %>
 
-
 <form action="/home/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">
 
   <%  posts.forEach(function(post, index){ %>
-<!-- <a class="my-card" href="/posts/<%=post._id%>/<%=username%>">
-    <div class="card main-card" style="width: 180px !important; margin: 20px; "> 
-      <img src="../public/images/blog.png" width="60px" style="border-radius:100% ;" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h2><%=post.title.substring(0, 10)%></h2>
-        <h5><%=post.body.substring(0, 100) + " ..."%> 
-      </h5>
-      <h6 style="color: rgb(255, 66, 66); font-size: large;"><%=post.tag%></h6>
-        
-     <span><%=post.date%> <%=post.time%></span> <span class="trashBin" style="margin-left: 10px;"><button type="submit" name="trashBtn" value="<%=post._id%>"><i class="fa-solid fa-recycle"></i></button></span>
-     
-      </div>
-      </div>
-    </a> -->
 <div class="uk-animation-toggle " style=" margin:20px auto;" tabindex="0">
       <div class="uk-animation-scale-grow">
     <div class="uk-card uk-card-default uk-width-1-2@m" style="width:240px;">
@@ -88,7 +73,7 @@
               <div class="uk-width-auto">
               </div>
               <div class="uk-width-expand" >
-                  <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 10)%></h3>
+                  <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 15)%></h3>
                   <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00"><%=post.date%> &nbsp;  |&nbsp;  <%=post.time%></time></p>
                   <span class="uk-label uk-label-danger"><%=post.tag.substring(0, 10)%></span>
                   <span style="font-size:14px; float: right;" class="uk-badge"><%=post.prPb%></span>
@@ -96,8 +81,8 @@
           </div>
       </div>
       <div class="uk-card-body" style="height:150px !important; padding: 20px;">
-        <%  if (post.body.length >= 150){ %>
-          <p><%=post.body.substring(0, 150) + " ..."%> </p>
+        <%  if (post.body.length >= 130){ %>
+          <p><%=post.body.substring(0, 130) + " ..."%> </p>
       <%  }else{ %>
         <p><%=post.body%> </p>
     <%    } %>

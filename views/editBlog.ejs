@@ -6,13 +6,28 @@
         
         <label style="letter-spacing: 1px; font-size: larger;">Title</label>
         <input class="form-control" type="text" value="<%=title%>" name="postTitleUp">
-        <label style="letter-spacing: 1px; font-size: larger;">Tags</label>
-        <input class="form-control" placeholder="blog tag" type="text" value="<%=tag%>" name="postTagUp">
-        <label style="letter-spacing: 1px; font-size: larger;">Post</label>
+        <label style="letter-spacing: 1px; font-size: larger;">Category</label>
+        <!-- <input class="form-control" placeholder="blog Category" type="text" value="<%=tag%>" name="postTagUp"> -->
+        <input required list="categories" class="form-control" placeholder="blog categorie" value="<%=tag%>" type="text" name="postTagUp"  />
+        <datalist id="categories">
+          <option value="None">
+          <option value="Travel">
+          <option value="Food">
+          <option value="Fitness">
+          <option value="Lifestyle">
+          <option value="Photography">
+          <option value="Fashion">
+          <option value="Health">
+          <option value="Multimedia">
+          <option value="News">
+        </datalist>
+
+        <label style="letter-spacing: 1px; font-size: larger;">Body</label>
         <textarea class="form-control" name="postBodyUp" rows="10" cols="30" placeholder="minimum 100 character"><%=body%></textarea>
       </div>
+      <hr>
       <div style="display: flex; justify-content: space-evenly;">
-        <button style="padding:0 10px;" class="uk-button uk-button-secondary" value="<%=editPostId%>" type="submit" name="buttonUp">Update &nbsp; <span uk-icon="icon: check; ratio: 1.5"></span></button>
+        <button uk-tooltip="Save" style="padding:0 10px;" class="uk-button uk-button-secondary" value="<%=editPostId%>" type="submit" name="buttonUp">Update &nbsp; <span uk-icon="icon: check; ratio: 1.5"></span></button>
 
         <a style="padding:0 10px;" uk-tooltip="Back to Post" class="uk-button uk-button-primary" href="/posts/<%=editPostId%>/<%=username%>"><span class="uk-margin-small-right" uk-icon="icon: arrow-left; ratio: 1.5"></span>Back</a>
   

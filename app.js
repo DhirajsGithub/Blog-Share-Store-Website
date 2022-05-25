@@ -972,7 +972,7 @@ app.post("/editBlog/:username", (req, res) => {
             if (err) {
               console.log(err);
             } else {
-              res.redirect("/home/" + req.params.username);
+              res.redirect("/posts/" + editPostId+"/"+ req.params.username);
               // console.log("update successfully", docs);
             }
           }
@@ -990,7 +990,7 @@ app.get("/pr-to-pb/:blogId/:username", (req, res) => {
     const reqBlog = req.params.blogId;
     const onwner = req.params.owner;
     let dateOF = myDate();
-
+    User.findOne({username: req.params.username}, (err, user1)=>{
     Blog.findByIdAndUpdate(reqBlog, { prPb: "public" }, (err, docs) => {
       if (err) {
         console.log(err);
@@ -1005,7 +1005,7 @@ app.get("/pr-to-pb/:blogId/:username", (req, res) => {
           owner: docs.owner,
           tag: docs.tag,
           prPb: "public",
-          avatar : docs.avatar,
+          avatar : user1.avatar,
          
         });
         blog.save((err) => {
@@ -1017,6 +1017,7 @@ app.get("/pr-to-pb/:blogId/:username", (req, res) => {
         });
       }
     });
+  })
   } else {
     res.redirect("/");
   }
@@ -1077,10 +1078,10 @@ app.get("/notification/:username/", (req, res) => {
         user: user,
         count: "Notify",
         username: req.params.username,
-        subscription: user.notSub ? user.notSub.reverse():"",
+        subscription: user.notSub ? user.notSub.reverse(): "",
         likeBy: user.notLikedBy ? user.notLikedBy.reverse():"",
         commentBy: user.notCommentBy ? user.notCommentBy.reverse():"",
-        subRemoved: user.subRemoved? user.subRemoved.reverse():"",
+        subRemoved: user.subRemoved  ? user.subRemoved.reverse():"",
         avatar : user ? user.avatar : ''
       });
     }
