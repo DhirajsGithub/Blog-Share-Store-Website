@@ -6,7 +6,7 @@
 <div class="uk-background-muted uk-padding uk-panel">
   
    <span style="color: rgb(252, 71, 71);" uk-icon="icon: trash; ratio: 3"></span>
-    <h2><%=username%></h2>
+    <h2>Trashed Blogs</h2>
 
     <%if (posts.length === 0){%>
       <div style="text-align: center;">
@@ -35,7 +35,11 @@
           </div>
       </div>
       <div class="uk-card-body" style="height:150px !important; padding: 20px;">
-        <p><%=post.body.substring(0, 150) + " ..."%> </p>
+        <%  if (post.body.length >= 150){ %>
+          <p><%=post.body.substring(0, 150) + " ..."%> </p>
+      <%  }else{ %>
+        <p><%=post.body%> </p>
+    <%    } %>
       </div>
       <div class="uk-card-footer">
         <!-- <span class="trashBin"><button style="padding:0; padding: 0 auto;" type="submit" name="trashBtn" value="<%=post._id%>"> 

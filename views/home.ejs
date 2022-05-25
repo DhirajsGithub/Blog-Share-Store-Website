@@ -4,14 +4,19 @@
   
   <div style="display:flex ; justify-content: space-between;">
   
-  <div>
-    <span style="color: #1abc9c;" uk-icon="icon: home; ratio: 3"></span>
-    <h2><%=username%></h2>
+  <div style="display: flex ;">
+    <span style="color: #1abc9c; margin: auto 0;" uk-icon="icon: home; ratio: 3"></span>
+    <div style="margin: auto 40px;">
+      <h4 style="margin: 0;">Hey there !</h4>
+    <h2 style="margin: 0;"><%=username.slice(0,username.length-4).substring(0,20)%></h2>
+    </div>
   </div>
+
   <div class="avatar">
     <img src="<%=avatar%>" width="100" height="100" ><br>
 
     <a href="#modal-overflow" uk-toggle>Choose Avatar</a>
+    
 
 <div id="modal-overflow" uk-modal>
     <div style="width: 80%;" class="uk-modal-dialog">
@@ -44,12 +49,11 @@
     </div>
 </div>
 
-
   </div>
 
 </div>
 
-
+<hr>
 <%if (posts.length === 0){%>
   <div style="text-align: center;">
     <h3>Your Blog folder is Empty !!!</h3>
@@ -92,7 +96,12 @@
           </div>
       </div>
       <div class="uk-card-body" style="height:150px !important; padding: 20px;">
-        <p><%=post.body.substring(0, 150) + " ..."%> </p>
+        <%  if (post.body.length >= 150){ %>
+          <p><%=post.body.substring(0, 150) + " ..."%> </p>
+      <%  }else{ %>
+        <p><%=post.body%> </p>
+    <%    } %>
+        
       </div>
       <div class="uk-card-footer">
         <!-- <span class="trashBin"><button style="padding:0; padding: 0 auto;" type="submit" name="trashBtn" value="<%=post._id%>"> 

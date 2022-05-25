@@ -1,10 +1,15 @@
 <%- include("partials/header", {count:count, username:username}); -%>
 
 <div>
-  <h3><%=username%></h3>
+  
+  <h3><%=username.slice(0, username.length-4).substring(0,15)%></h3>
   <div style="text-align: center;">
-    <h1 style="margin-bottom:5px; text-decoration: underline; text-shadow: 4px 4px 5px rgb(136, 136, 136); text-decoration-thickness: 2px; text-transform: capitalize; "><%=title%></h1>
+    <h1 style="margin-bottom:5px; text-decoration: underline; text-shadow: 4px 4px 5px rgb(136, 136, 136); text-decoration-thickness: 2px; text-transform: capitalize; "><%=title.substring(0,20)%></h1>
+  <% if (tag.length <= 10){ %>
     <span class="uk-label uk-label-danger"><%=tag%></span>
+  <% }else{ %>
+    <span class="uk-label uk-label-danger"><%=tag.substring(0,15)+"..."%></span>
+  <% } %>
   </div>
   <p style="font-size:x-large;"><%=content%></p>
 </div>
@@ -21,7 +26,7 @@
     <!-- <div style="float: right;"> -->
      <a href="/pr-to-pb/<%=id%>/<%=username%>"> <button style="padding:0 10px; display: <%=display%>;" uk-tooltip="share your private blog"  class="uk-button uk-button-secondary">Share<span uk-icon="icon: forward; ratio: 1.6"></span></button> </a>
      
-    <a style="padding:0 10px;" uk-tooltip="back to home" class="uk-button uk-button-primary" href="/home/<%=username%>"><span class="uk-margin-small-right" uk-icon="icon: arrow-left; ratio: 1.5"></span>Back</a>
+    <a style="padding:0 10px;" uk-tooltip="Back to Home" class="uk-button uk-button-primary" href="/home/<%=username%>"><span class="uk-margin-small-right" uk-icon="icon: arrow-left; ratio: 1.5"></span>Back</a>
   <!-- </div> -->
   
 </div>

@@ -354,6 +354,7 @@ app.get("/public-posts/:blogId/:username", (req, res) => {
     User.findOne({username: req.params.username}, (err, user)=>{
       publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
         res.render("publicPost", {
+          blogId : blog.id,
           username: req.params.username,
           title: blog.title,
           tag: blog.tag,
@@ -523,6 +524,7 @@ app.post("/comments/:blogId/:owner/:username", (req, res) => {
             {
               $push: {
                 commentBy: {
+                  blogId: docs.id,
                   blogTitle: docs.title,
                   commentBy: req.params.username,
                   date: date.toLocaleDateString(),
@@ -553,6 +555,7 @@ app.post("/comments/:blogId/:owner/:username", (req, res) => {
                         {
                           $push: {
                             notCommentBy: {
+                              blogId: docs.id,
                               blogTitle: docs.title,
                               commentBy: req.params.username,
                               date: date.toLocaleDateString(),
@@ -616,6 +619,7 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
                 {
                   $push: {
                     likedBy: {
+                      blogId: docs.id,
                       blogTitle: docs.title,
                       likedBy: req.params.username,
                       date: date.toLocaleDateString(),
@@ -646,6 +650,7 @@ app.post("/likes/:blogId/:owner/:username", (req, res) => {
                             {
                               $push: {
                                 notLikedBy: {
+                                  blogId: docs.id,
                                   blogTitle: docs.title,
                                   likedBy: req.params.username,
                                   date: date.toLocaleDateString(),

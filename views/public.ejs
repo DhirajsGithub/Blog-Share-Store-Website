@@ -37,18 +37,22 @@ posts.forEach(function(post, index){ %>
             text-transform: capitalize;
           "
         >
-          <%=post.title%>
+          <%=post.title.substring(0,20)%>
         </h2>
         <div style="padding-left: 10px; padding-bottom: 10px">
-          <span class="uk-label uk-label-danger"><%=post.tag%></span>
+          <span class="uk-label uk-label-danger"><%=post.tag.substring(0,15)%></span>
         </div>
       </div>
       <div style="text-align: left">
+        <%  if (post.body.length >= 300){ %>
+          <p style="text-align: left; padding-left: 10px; height: 130px">
+            <%=post.body.substring(0,300)+"...."%>
+          </p>
+      <%  }else{ %>
         <p style="text-align: left; padding-left: 10px; height: 130px">
-          
-          
-          <%=post.body.substring(0,300)+"...."%>
+          <%=post.body%>
         </p>
+    <%    } %>
 
 
 
