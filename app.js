@@ -273,7 +273,7 @@ app.get("/public/:username", function (req, res) {
           
         });
       }
-    }).sort("-like.length") ;
+    }).sort("-date") ;
   })
   } else {
     res.redirect("/");

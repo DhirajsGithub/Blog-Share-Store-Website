@@ -139,25 +139,25 @@ a{
 .tags .write{
   /* animation: name duration timing-function delay iteration-count direction fill-mode; */
   animation-name: move-around;
-  animation-duration: 3.5s;
+  animation-duration: 0.5s;
 }
 .tags .share{
   /* animation: name duration timing-function delay iteration-count direction fill-mode; */
   animation-name: move-around;
   transition: opacity 1s;
   /* animation-delay: 1s; */
-  animation-duration: 4.5s;
+  animation-duration: 1s;
 }
 
 .tags .store{
   /* animation: name duration timing-function delay iteration-count direction fill-mode; */
   animation-name: move-around;
   /* animation-delay: 2s; */
-  animation-duration: 5.5s;
+  animation-duration: 1.5s;
 }
 @keyframes move-around{
   0%{
-    transform: translateY(125px);
+    transform: translateY(25px);
       opacity: 0;
   }
   10%{
@@ -232,8 +232,8 @@ a{
 
 /* ################################ styling login/register button side by side ############### */
 .side-login-register{
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
 }
 .hover-blue:hover{
   color: #1f87f0 !important;

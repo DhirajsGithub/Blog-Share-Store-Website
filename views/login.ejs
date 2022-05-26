@@ -22,17 +22,17 @@
 }
 body{
     /* background-image: url('/Users/dhiraj/Downloads/Full_stack_web_dev/EJS/Blog_post_website/Blog-with-Database/public/images/login-bg.jpeg'); */
-    background: rgb(36, 143, 131);
+    background: rgb(44, 163, 149);
 
 
 }
 .background{
     width: 430px;
     height: 520px;
-    position: absolute;
+    /* position: absolute;
     transform: translate(-50%,-50%);
     left: 50%;
-    top: 50%;
+    top: 50%; */
 }
 /* .background .shape{
     height: 200px;
@@ -62,10 +62,10 @@ form{
     width: 400px;
     background-color: rgba(255,255,255,0.13);
     /* background-color: rgb(255, 203, 106); */
-    position: absolute;
+    /* position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;
-    left: 50%;
+    left: 50%; */
     border-radius: 10px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255,255,255,0.1);
@@ -140,17 +140,28 @@ button:hover{
       <i class="fa-solid fa-cloud-arrow-up store">&nbsp;Store</i>
     </h1>
   </div>
+
+
+  <div style="display:flex !important; justify-content: space-around; position: absolute; top: 50%; left: 50%;transform: translate(-50%, -50%);">
+
+ 
+  <div style="margin: auto 100px auto 0; ">
+    <img style="width: 400px; aspect-ratio: 1; object-fit:cover; border-radius: 100%;
+    box-shadow: 3px 3px 3px 4px black;"  src="/Users/dhiraj/Downloads/Full_stack_web_dev/EJS/Blog_post_website/Blog-with-Database/public/images/bb.png" alt="">
+  </div>
+
+
     <form action="/" method="POST">
       <div class="login-selection" style="background: rgb(137, 206, 192); border-radius: 10px; ">
       <div class="side-login-register">
-        <a href="/"><h3 class="side-login" style="padding: 2px 15px; color: rgb(228, 236, 240);">Login</h3></a>
-        <a href="/register"><h3 class="side-register" style="background-color:rgb(57, 140, 165);padding: 2px 15px; border-top-right-radius: 10px;  color: rgb(228, 236, 240); ">Register</h3></a>
+        <a href="/"><h3 class="side-login" style="padding: 2px 0px; margin: 0; color: rgb(228, 236, 240); width: 49%; display: inline-block;">Login</h3></a>
+        <a style="text-align:end ;" href="/register"><h3 class="side-register" style="background-color:rgb(57, 140, 165);padding: 2px 0px; margin: 0; border-top-right-radius: 10px; display: inline-block; margin-right: -50px;  color: rgb(228, 236, 240); width: 49.5% ">Register</h3></a>
       </div>
        
         <div style="padding: 0 10px; ">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" required placeholder="Email or Phone" class="form-control" name="username">
+          <input type="email" required placeholder="Email" class="form-control" name="username">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -162,6 +173,9 @@ button:hover{
       </div>
       </div>
       </form>
+    </div>
 
 </body>
 </html>
+
+
