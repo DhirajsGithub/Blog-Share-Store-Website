@@ -5,7 +5,7 @@
 <%- include("partials/header", {count:count, username:username}); -%>
 <div class="uk-background-muted uk-padding uk-panel">
   
-   <span style="color: rgb(252, 71, 71);" uk-icon="icon: trash; ratio: 3"></span>
+   <span uk-tooltip="Your Trash Blogs will appear here" style="color: rgb(252, 71, 71);" uk-icon="icon: trash; ratio: 3"></span>
     <h2>Trashed Blogs</h2>
 
     <%if (posts.length === 0){%>
