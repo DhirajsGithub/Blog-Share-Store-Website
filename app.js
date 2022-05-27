@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
     default : []
   },
 
+  subs:{
+    type : Array,
+    default : []
+  },
   // the owner which subscribe to other user
   subscribedTo: {
     type: Array,
@@ -142,6 +146,19 @@ const publicBlogSchema = new mongoose.Schema({
 
 // making a collection/model
 const Blog = mongoose.model("Blog", publicBlogSchema);
+
+/////////////////////// sub update blog shit //////////////////////
+const blogPostSchema = new mongoose.Schema({
+
+  blogBy : String,
+  blogId : String, 
+  date : String,
+  time : String,
+  blogTitle : String
+})
+
+const BlogUpdate = mongoose.model("BlogUpdate", blogPostSchema);
+
 
 // use static authenticate method of model in LocalStrategy
 // it must be like this
@@ -273,7 +290,7 @@ app.get("/public/:username", function (req, res) {
           
         });
       }
-    }).sort("-date") ;
+    }).sort("-date").sort("-time") ;
   })
   } else {
     res.redirect("/");
@@ -323,24 +340,25 @@ app.post("/public/:username", (req, res) => {
         if (err) {
           console.log(err)
         }else{
-        User.findOneAndUpdate({username: req.params.username}, {
+        User.updateMany({subs: req.params.username}, {
           $push :{
-            notBlogBy : {
+            notBlogBy :{
               blogId : result.id,
-              blogTitle : result.title,
+              blogTitle : req.body.postTitle,
               date: dateOF[0],
               time: dateOF[1],
-              owner : req.body.username
+              blogBy : req.params.username
+
             }
           }
         }, (err, success)=>{
-          if(err){
+          if (err){
             console.log(err)
           }else{
-            // need to set the notificcatio for it's subscribers
             res.redirect("/public/" + req.params.username);
           }
         })
+      
         }
       });
     }
@@ -456,6 +474,10 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
                     time: date.toLocaleTimeString(),
                   },
                 },
+                $push : {
+                  subs : owner
+                  
+                }
               },
               (err, success) => {
                 if (err) {
@@ -1082,7 +1104,8 @@ app.get("/notification/:username/", (req, res) => {
         likeBy: user.notLikedBy ? user.notLikedBy.reverse():"",
         commentBy: user.notCommentBy ? user.notCommentBy.reverse():"",
         subRemoved: user.subRemoved  ? user.subRemoved.reverse():"",
-        avatar : user ? user.avatar : ''
+        avatar : user ? user.avatar : '',
+        notBlogBy : user ? user.notBlogBy.reverse() : "",
       });
     }
   });
@@ -1267,6 +1290,9 @@ app.get("/avatar/https://avatars.dicebear.com/api/avataaars/:link.svg/:username"
   })
   
 });
+
+
+
 
 const port = 5500;
 app.listen(port, function () {

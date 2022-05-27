@@ -206,35 +206,9 @@ a{
   box-shadow: 5px 5px 10px 1px #00ffcc ;
 }
 
-.speciality{
-  padding: 50px 0 0 70vw;
-  font-size:23px;
-  color: rgb(0 225 255);
-}
-.speciality li{
-  animation-name: transformY;
-  animation-duration: 2s;
-}
-.speciality .spec2{
-  animation-duration: 2.5s;
-}
-.speciality .spec3{
-  animation-duration: 3s;
-}
-.speciality .spec4{
-  animation-duration: 3.5s;
-}
-@keyframes transformY{
-  0%{
-    transform: translateY(500px);
-  }
-}
 
 /* ################################ styling login/register button side by side ############### */
-.side-login-register{
-  /* display: flex;
-  justify-content: space-between; */
-}
+
 .hover-blue:hover{
   color: #1f87f0 !important;
 }
@@ -274,7 +248,6 @@ a{
 .compose-edit-form input[type="text"]:nth-of-type(2){
   width: 300px;
 }
-
 
 
 /* ##################################### media query to public posts ###################### */

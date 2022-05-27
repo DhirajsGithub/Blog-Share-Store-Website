@@ -56,15 +56,20 @@
 </a>
 <%  }) %>
 
-<!-- <% user.likedBy.forEach((like)=>{ %> -->
-<div style="display:flex ; justify-content: space-between;" class="uk-alert-warning" uk-alert>
+<% notBlogBy.forEach((e)=>{ %>
+    <a href="/public/<%=username%>/#<%=e.blogId%>">
+ <div style="display:flex ; justify-content: space-between;" class="uk-alert-success" uk-alert>
     <div>
-    <h4>fsd &nbsp; : &nbsp; Just Compose A new Blog</h4>
-    <p>compose a new blog blogname visit link</p>
+    <h4><%=e.blogBy.substring(0,20)%> &nbsp; : &nbsp; Share a new Blog <span style="border-bottom:1px dashed black ;"><%=e.blogTitle.substring(0,25)%></span> </h4>
+    <p>On:  <%=e.date%> | <%=e.time%></p>
+
 </div>
-<!-- <a style="height: 40px;" class="uk-button uk-button-default" href="/notification/notfy-del/<%=likeBy%>/<%=like.likedBy.likedBy%>/<%=username%>">Delete</a> -->
+
+<!-- <a style="height: 40px;" class="uk-button uk-button-default" href="/delete/blogUpdates/<%=e.blogBy%>/<%=username%>">Delete</a> -->
+
 </div>
-<!-- <%  }) %> -->
+</a>
+<%  }) %>
 
 </div>
 <%- include("partials/footer"); -%>
