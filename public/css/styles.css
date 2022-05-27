@@ -247,6 +247,13 @@ a{
 }
 .compose-edit-form input[type="text"]:nth-of-type(2){
   width: 300px;
+
+}
+.input-text-size input[type="text"] {
+  font-size:20px;
+}
+.input-text-size textarea{
+  font-size:20px;
 }
 
 

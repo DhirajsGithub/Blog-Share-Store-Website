@@ -1,7 +1,7 @@
 
 <%- include("partials/header", {count:count, username:username}); -%>
     <h1>Compose</h1>
-    <form class="" action="/compose/<%=username%>" method="post">
+    <form class="input-text-size" action="/compose/<%=username%>" method="post">
       <div class="form-group compose-edit-form">
         <label style="letter-spacing: 1px; font-size: larger;">Title</label>
         <input required class="form-control" placeholder="Title of your blog" type="text" name="postTitle">
@@ -21,7 +21,7 @@
           </datalist>
 
           <label style="letter-spacing: 1px; font-size: larger;">Body</label>
-          <textarea required class="form-control" name="postBody" rows="13" cols="30" placeholder="Write your blog here minimum 100 words"></textarea>
+          <textarea type="text" required class="form-control" name="postBody" rows="10" cols="25" placeholder="Write your blog here minimum 100 words"></textarea>
       </div>
       <input type="text" hidden name="username" value="<%=username%>">
       <div style="display: flex; justify-content: space-evenly; margin-top: 60px; margin-bottom: 20px;">

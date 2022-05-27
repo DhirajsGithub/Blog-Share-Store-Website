@@ -31,9 +31,14 @@
                 <li style="display: flex;">
                 <h4 style="margin:0 10px ;"><%=e.subscribedTo.slice(0, e.subscribedTo.length-4).substring(0,20)%></h4>
                 <p style="margin: 5px 10px 0  ;">on : <%=e.date%></p>
+
                 <a style="padding: 0 2px;" class="uk-button uk-button-default" href="/remove-sub/<%=e.subscribedTo%>/<%=username%>" uk-tooltip="Unsubscribe this user">
-                <span style="margin: 5px 0 0  ;" uk-icon="icon: close; ratio: 1">unsubscribe</span>
+                <span style="margin: 5px 0 0  ;" uk-icon="icon: close; ratio: 1" type="button">unsubscribe</span>
+    
+                
             </a>
+               
+
                 </li>
                 <hr>
           <%  }) %>

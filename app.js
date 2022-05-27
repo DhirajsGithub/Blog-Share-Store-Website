@@ -148,16 +148,7 @@ const publicBlogSchema = new mongoose.Schema({
 const Blog = mongoose.model("Blog", publicBlogSchema);
 
 /////////////////////// sub update blog shit //////////////////////
-const blogPostSchema = new mongoose.Schema({
 
-  blogBy : String,
-  blogId : String, 
-  date : String,
-  time : String,
-  blogTitle : String
-})
-
-const BlogUpdate = mongoose.model("BlogUpdate", blogPostSchema);
 
 
 // use static authenticate method of model in LocalStrategy
@@ -474,10 +465,6 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
                     time: date.toLocaleTimeString(),
                   },
                 },
-                $push : {
-                  subs : owner
-                  
-                }
               },
               (err, success) => {
                 if (err) {
@@ -499,7 +486,22 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
                       if (err) {
                         console.log(err);
                       } else {
-                        res.redirect("/user/public/" + owner + "/" + reqSub);
+                        User.findOneAndUpdate(
+                          { username: reqSub },
+                          {
+                              $push : {
+                            subs : owner
+                            
+                          }
+                          },
+                          (err, success) => {
+                            if (err) {
+                              console.log(err);
+                            } else {
+                              res.redirect("/user/public/" + owner + "/" + reqSub);
+                            }
+                          }
+                        );
                       }
                     }
                   );
@@ -1034,7 +1036,25 @@ app.get("/pr-to-pb/:blogId/:username", (req, res) => {
           if (err) {
             console.log(err);
           } else {
-            res.redirect("/home/" + req.params.username);
+            User.updateMany({subs: req.params.username}, {
+              $push :{
+                notBlogBy :{
+                  blogId : docs.id,
+                  blogTitle : docs.title,
+                  date: dateOF[0],
+                  time: dateOF[1],
+                  blogBy : docs.owner,
+    
+                }
+              }
+            }, (err, success)=>{
+              if (err){
+                console.log(err)
+              }else{
+                res.redirect("/home/" + req.params.username);
+              }
+            })
+            
           }
         });
       }
@@ -1131,14 +1151,14 @@ app.get("/delete/sub/:name/:username", (req, res) => {
   );
 });
 
-app.get("/delete/comments/:by/:title/:username", (req, res) => {
+app.get("/delete/comments/:by/:blogId/:username", (req, res) => {
   User.findOneAndUpdate(
     { username: req.params.username },
     {
       $pull: {
         notCommentBy: {
           commentBy: req.params.by,
-          blogTitle: req.params.title,
+          blogId: req.params.blogId,
         },
       },
     },
@@ -1152,13 +1172,14 @@ app.get("/delete/comments/:by/:title/:username", (req, res) => {
   );
 });
 
-app.get("/delete/likes/:by/:username", (req, res) => {
+app.get("/delete/likes/:blogId/:by/:username", (req, res) => {
   User.findOneAndUpdate(
     { username: req.params.username },
     {
       $pull: {
         notLikedBy: {
-          likedBy: req.params.by,
+          blogId: req.params.blogId,
+          likedBy : req.params.by
         },
       },
     },
@@ -1178,6 +1199,25 @@ app.get("/delete/sub2/:name/:username", (req, res) => {
       $pull: {
         subRemoved: {
           subRemoved: req.params.name,
+        },
+      },
+    },
+    (err, success) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/notification/" + req.params.username);
+      }
+    }
+  );
+});
+app.get("/delete/blogUpdates/:blogId/:username", (req, res) => {
+  User.findOneAndUpdate(
+    { username: req.params.username },
+    {
+      $pull: {
+        notBlogBy: {
+          blogId: req.params.blogId,
         },
       },
     },
@@ -1294,7 +1334,7 @@ app.get("/avatar/https://avatars.dicebear.com/api/avataaars/:link.svg/:username"
 
 
 
-const port = 5500;
+const port = process.env.PORT || 5500;
 app.listen(port, function () {
   console.log("Server started on port ", port);
 });
