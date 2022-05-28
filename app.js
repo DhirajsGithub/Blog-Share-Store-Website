@@ -32,7 +32,8 @@ app.use(
 app.use(passport.initialize()); // initialization passport
 app.use(passport.session()); // using passport to use session
 
-const url = "mongodb://localhost:27017/blogsDB";
+// const url = "mongodb://localhost:27017/blogsDB";
+const url = "mongodb+srv://dhirajborse:tAhXGWRCf7c4xjF8@cluster0.tzdsj.mongodb.net/blogsDB";
 mongoose.connect(url, { useNewUrlParser: true });
 
 // it must be a mongoose schema and not standard .js object
