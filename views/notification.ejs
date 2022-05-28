@@ -33,7 +33,7 @@
     <a href="/public/<%=username%>/#<%=comment.blogId%>">
   <div style="display:flex ; justify-content: space-between;" class="uk-alert-primary" uk-alert>
     <div>
-    <h4><%=comment.commentBy.substring(0,20)%> &nbsp; : &nbsp; Commented on Your Blog <span style="border-bottom:1px dashed black ;"> <%=comment.blogTitle.substring(0,25)%> </span></h4>
+    <h4><%=comment.commentBy.substring(0,20)%> &nbsp; : &nbsp; Commented on your blog <span style="font-weight: bold ;"> <%=comment.blogTitle.substring(0,25)%> </span></h4>
     <p>On: <%=comment.date%> | <%=comment.time%></p>
 </div>
 <a style="height: 40px;" class="uk-button uk-button-default" href="/delete/comments/<%=comment.commentBy%>/<%=comment.blogId%>/<%=username%>">Delete</a>
@@ -45,7 +45,7 @@
     <a href="/public/<%=username%>/#<%=like.blogId%>">
  <div style="display:flex ; justify-content: space-between;" class="uk-alert-success" uk-alert>
     <div>
-    <h4><%=like.likedBy.substring(0,20)%> &nbsp; : &nbsp; like Your Blog  <span style="border-bottom:1px dashed black ;"><%=like.blogTitle.substring(0,25)%></span> </h4>
+    <h4><%=like.likedBy.substring(0,20)%> &nbsp; : &nbsp; Liked your blog  <span style="font-weight: bold ;"><%=like.blogTitle.substring(0,25)%></span> </h4>
     <p>On:  <%=like.date%> | <%=like.time%></p>
 
 </div>
