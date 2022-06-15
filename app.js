@@ -33,7 +33,8 @@ app.use(passport.initialize()); // initialization passport
 app.use(passport.session()); // using passport to use session
 
 // const url = "mongodb://localhost:27017/blogsDB";
-const url = "mongodb+srv://dhirajborse:tAhXGWRCf7c4xjF8@cluster0.tzdsj.mongodb.net/blogsDB";
+const url =
+  "mongodb+srv://dhirajborse:tAhXGWRCf7c4xjF8@cluster0.tzdsj.mongodb.net/blogsDB";
 mongoose.connect(url, { useNewUrlParser: true });
 
 // it must be a mongoose schema and not standard .js object
@@ -43,64 +44,64 @@ const userSchema = new mongoose.Schema({
   // the users which subscribed to owner
   subscription: {
     type: Array,
-    default : []
+    default: [],
   },
 
-  subs:{
-    type : Array,
-    default : []
+  subs: {
+    type: Array,
+    default: [],
   },
   // the owner which subscribe to other user
   subscribedTo: {
     type: Array,
-    default : []
+    default: [],
   },
   // posts liked/comment by other user to the owner
   likedBy: {
     type: Array,
-    default : []
+    default: [],
   },
   commentBy: {
     type: Array,
-    default : []
+    default: [],
   },
 
   // owner liked/comment by owner to other user
-  commentTo:{
+  commentTo: {
     type: Array,
-    default : []
+    default: [],
   },
   likedTo: {
     type: Array,
-    default : []
+    default: [],
   },
 
   notSub: {
     type: Array,
-    default : []
+    default: [],
   },
   notLikedBy: {
     type: Array,
-    default : []
+    default: [],
   },
   notCommentBy: {
     type: Array,
-    default : []
+    default: [],
   },
   subRemoved: {
     type: Array,
-    default : []
+    default: [],
   },
   notBlogBy: {
     type: Array,
-    default : []
+    default: [],
   },
 
   avatar: {
-    default : "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
-    type : String
+    default:
+      "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
+    type: String,
   },
-
 });
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("BlogUser", userSchema);
@@ -123,34 +124,31 @@ const publicBlogSchema = new mongoose.Schema({
   },
   owner: String,
   tag: {
-    type : String,
-    default: "tag"
+    type: String,
+    default: "tag",
   },
 
   like: {
     type: Array,
-    default : []
+    default: [],
   },
 
   comments: {
     type: Array,
-    default : []
+    default: [],
   },
   prPb: String,
   avatar: {
-    default : "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
-    type : String
+    default:
+      "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
+    type: String,
   },
-
-
 });
 
 // making a collection/model
 const Blog = mongoose.model("Blog", publicBlogSchema);
 
 /////////////////////// sub update blog shit //////////////////////
-
-
 
 // use static authenticate method of model in LocalStrategy
 // it must be like this
@@ -234,13 +232,13 @@ app.get("/home/:username", function (req, res) {
   if (req.isAuthenticated()) {
     // console.log(req.params.username);
     // finding all the blogs in the DB
-    User.findOne({username : req.params.username}, (err, user)=>{
+    User.findOne({ username: req.params.username }, (err, user) => {
       Blog.find({ owner: req.params.username }, function (err, blogs) {
         if (err) {
           console.log("error occur");
         } else {
           res.render("home", {
-            avatar : user ? user.avatar : '',
+            avatar: user ? user.avatar : "",
             username: req.params.username,
             posts: blogs,
             count: blogs.length + "-Blogs",
@@ -249,8 +247,7 @@ app.get("/home/:username", function (req, res) {
       })
         .sort("-date")
         .sort("-time");
-    })
-    
+    });
   } else {
     // req.flash("error", "You need to be logged in first");
     res.redirect("/");
@@ -263,27 +260,27 @@ const publicBlog = mongoose.model("publicBlog", publicBlogSchema);
 
 // public blogs
 app.get("/public/:username", function (req, res) {
-
   if (req.isAuthenticated()) {
-    User.findOne({username : req.params.username}, (err, user)=>{
+    User.findOne({ username: req.params.username }, (err, user) => {
       // console.log(user.subscription)
-    
-    publicBlog.find({}, (err, blogs) => {
-      // counting the likes ???
-      // console.log(blogs[0].id)
-      if (err) {
-        console.log(err)
-      }else{
-        res.render("public", {
-          avatar : user ? user.avatar : '' ,
-          count: "Trending",
-          username: req.params.username,
-          posts: blogs,
-          
-        });
-      }
-    }).sort("-date").sort("-time") ;
-  })
+
+      publicBlog
+        .find({}, (err, blogs) => {
+          // counting the likes ???
+          // console.log(blogs[0].id)
+          if (err) {
+            console.log(err);
+          } else {
+            res.render("public", {
+              avatar: user ? user.avatar : "",
+              count: "Trending",
+              username: req.params.username,
+              posts: blogs,
+            });
+          }
+        }).sort("date").sort("-time")
+        
+    });
   } else {
     res.redirect("/");
   }
@@ -292,90 +289,88 @@ app.get("/public/:username", function (req, res) {
 app.post("/public/:username", (req, res) => {
   let dateOF = myDate();
 
+  User.findOne({ username: req.params.username }, (err, user1) => {
+    // let's store blog in the public model
 
-  User.findOne({username : req.params.username}, (err, user1)=>{
- 
-  // let's store blog in the public model
+    const blog = new publicBlog({
+      title: req.body.postTitle,
+      body: req.body.postBody,
+      date: dateOF[0],
+      time: dateOF[1],
+      owner: req.body.username,
+      tag: req.body.postTag,
+      prPb: req.body.public,
+      avatar: user1.avatar,
+    });
 
-  const blog = new publicBlog({
-    title: req.body.postTitle,
-    body: req.body.postBody,
-    date: dateOF[0],
-    time: dateOF[1],
-    owner: req.body.username,
-    tag: req.body.postTag,
-    prPb: req.body.public,
-    avatar : user1.avatar,
-  });
-
-  blog.save((err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      let dateOF = myDate();
-      // let's store blog in the blog model
-      const blog = new Blog({
-        // for having same id of public and private blog for updatation and delete when user update/delete blog from home
-        _id: result.id,
-        title: req.body.postTitle,
-        body: req.body.postBody,
-        date: dateOF[0],
-        time: dateOF[1],
-        owner: req.body.username,
-        tag: req.body.postTag,
-        prPb: req.body.public,
-        avatar : user1.avatar,
-      
-      });
-      // blog.save();
-      blog.save((err) => {
-        if (err) {
-          console.log(err)
-        }else{
-        User.updateMany({subs: req.params.username}, {
-          $push :{
-            notBlogBy :{
-              blogId : result.id,
-              blogTitle : req.body.postTitle,
-              date: dateOF[0],
-              time: dateOF[1],
-              blogBy : req.params.username
-
-            }
+    blog.save((err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let dateOF = myDate();
+        // let's store blog in the blog model
+        const blog = new Blog({
+          // for having same id of public and private blog for updatation and delete when user update/delete blog from home
+          _id: result.id,
+          title: req.body.postTitle,
+          body: req.body.postBody,
+          date: dateOF[0],
+          time: dateOF[1],
+          owner: req.body.username,
+          tag: req.body.postTag,
+          prPb: req.body.public,
+          avatar: user1.avatar,
+        });
+        // blog.save();
+        blog.save((err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            User.updateMany(
+              { subs: req.params.username },
+              {
+                $push: {
+                  notBlogBy: {
+                    blogId: result.id,
+                    blogTitle: req.body.postTitle,
+                    date: dateOF[0],
+                    time: dateOF[1],
+                    blogBy: req.params.username,
+                  },
+                },
+              },
+              (err, success) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  res.redirect("/public/" + req.params.username);
+                }
+              }
+            );
           }
-        }, (err, success)=>{
-          if (err){
-            console.log(err)
-          }else{
-            res.redirect("/public/" + req.params.username);
-          }
-        })
-      
-        }
-      });
-    }
+        });
+      }
+    });
   });
-});
 });
 
 app.get("/public-posts/:blogId/:username", (req, res) => {
   if (req.isAuthenticated()) {
     const reqPublicBlogId = req.params.blogId;
-    User.findOne({username: req.params.username}, (err, user)=>{
+    User.findOne({ username: req.params.username }, (err, user) => {
       publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
         res.render("publicPost", {
-          blogId : blog.id,
+          blogId: blog.id,
           username: req.params.username,
           title: blog.title,
           tag: blog.tag,
           content: blog.body,
           count: "Public",
           owner: blog.owner,
-          avatar : user ? user.avatar : ''
+          avatar: user ? user.avatar : "",
         });
       });
-    })
-    
+    });
   } else {
     res.redirect("/");
   }
@@ -385,7 +380,7 @@ app.get("/public-posts/:blogId/:username", (req, res) => {
 //   if (req.isAuthenticated()) {
 //     const reqPublicBlogId = req.params.blogId;
 //     User.findOne({username: req.params.username}, (err, user)=>{
-    
+
 //     publicBlog.findOne({ _id: reqPublicBlogId }, (err, blog) => {
 //       res.render("publicPost", {
 //         username: req.params.username,
@@ -405,24 +400,23 @@ app.get("/public-posts/:blogId/:username", (req, res) => {
 app.get("/user/public/:postOwner/:username", (req, res) => {
   if (req.isAuthenticated()) {
     const reqUser = req.params.postOwner;
-    User.findOne({username: req.params.username}, (err, user1)=>{
-    
-    User.findOne({ username: reqUser }, (err, user) => {
-      publicBlog.find({ owner: reqUser }, (err, blogs) => {
-        res.render("UserPublicPost", {
-          totalLikes: user.likedBy.length,
-          noOfSub: user.subscription.length,
-          owner: req.params.postOwner,
-          count: "Public",
-          blogsCount: blogs.length,
-          posts: blogs,
-          username: req.params.username,
-          avatar : user1 ? user1.avatar : "",
-          avatarOwn : user ? user.avatar : ""
+    User.findOne({ username: req.params.username }, (err, user1) => {
+      User.findOne({ username: reqUser }, (err, user) => {
+        publicBlog.find({ owner: reqUser }, (err, blogs) => {
+          res.render("UserPublicPost", {
+            totalLikes: user.likedBy.length,
+            noOfSub: user.subscription.length,
+            owner: req.params.postOwner,
+            count: "Public",
+            blogsCount: blogs.length,
+            posts: blogs,
+            username: req.params.username,
+            avatar: user1 ? user1.avatar : "",
+            avatarOwn: user ? user.avatar : "",
+          });
         });
       });
     });
-  });
   } else {
     res.redirect("/");
   }
@@ -445,7 +439,7 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
         {
           $push: {
             subscription: {
-              owner : owner,
+              owner: owner,
               subscribedBy: reqSub,
               date: date.toLocaleDateString(),
               time: date.toLocaleTimeString(),
@@ -460,7 +454,7 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
               {
                 $push: {
                   subscribedTo: {
-                    owner : reqSub,
+                    owner: reqSub,
                     subscribedTo: owner,
                     date: date.toLocaleDateString(),
                     time: date.toLocaleTimeString(),
@@ -490,16 +484,17 @@ app.post("/user/subscribe/:owner/:username", (req, res) => {
                         User.findOneAndUpdate(
                           { username: reqSub },
                           {
-                              $push : {
-                            subs : owner
-                            
-                          }
+                            $push: {
+                              subs: owner,
+                            },
                           },
                           (err, success) => {
                             if (err) {
                               console.log(err);
                             } else {
-                              res.redirect("/user/public/" + owner + "/" + reqSub);
+                              res.redirect(
+                                "/user/public/" + owner + "/" + reqSub
+                              );
                             }
                           }
                         );
@@ -728,7 +723,7 @@ app.get("/notification/private/:username", (req, res) => {
         count: "Notifications",
         username: req.params.username,
         user: docs,
-        avatar : docs ? docs.avatar : ''
+        avatar: docs ? docs.avatar : "",
       });
     });
   } else {
@@ -741,14 +736,13 @@ app.get("/notification/private/:username", (req, res) => {
 // getting a compose page
 app.get("/compose/:username", function (req, res) {
   if (req.isAuthenticated()) {
-    User.findOne({username: req.params.username}, (err, user)=>{
-    
-    res.render("compose", { 
-    count: "compose", 
-    username: req.params.username,
-    avatar : user ? user.avatar : ''
-   });
-  });
+    User.findOne({ username: req.params.username }, (err, user) => {
+      res.render("compose", {
+        count: "compose",
+        username: req.params.username,
+        avatar: user ? user.avatar : "",
+      });
+    });
   } else {
     res.redirect("/");
   }
@@ -763,28 +757,26 @@ function myDate() {
 // user can compose a blog add it as personal or personal+private
 app.post("/compose/:username", function (req, res) {
   // adding the last modified feature
-  User.findOne({username: req.params.username}, (err, user1)=>{
-
-  let dateOF = myDate();
-  // let's store blog with same title as well
-  const blog = new Blog({
-    title: req.body.postTitle,
-    body: req.body.postBody,
-    date: dateOF[0],
-    time: dateOF[1],
-    owner: req.body.username,
-    tag: req.body.postTag.length === 0 ? "none" : req.body.postTag,
-    prPb: req.body.private,
-    avatar : user1.avatar,
-   
+  User.findOne({ username: req.params.username }, (err, user1) => {
+    let dateOF = myDate();
+    // let's store blog with same title as well
+    const blog = new Blog({
+      title: req.body.postTitle,
+      body: req.body.postBody,
+      date: dateOF[0],
+      time: dateOF[1],
+      owner: req.body.username,
+      tag: req.body.postTag.length === 0 ? "none" : req.body.postTag,
+      prPb: req.body.private,
+      avatar: user1.avatar,
+    });
+    // blog.save();
+    blog.save((err) => {
+      if (!err) {
+        res.redirect("/home/" + req.body.username);
+      }
+    });
   });
-  // blog.save();
-  blog.save((err) => {
-    if (!err) {
-      res.redirect("/home/" + req.body.username);
-    }
-  });
-});
 });
 
 // user can view a blog by clicking on the Read More button
@@ -795,26 +787,24 @@ app.get("/posts/:blogId/:username", function (req, res) {
     // console.log(requestedPostId);
     // console.log(req.params.blogId);
 
-    User.findOne({username: req.params.username}, (err, user)=>{
-    
-
-    Blog.findOne({ _id: requestedPostId }, function (err, blog) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.render("post", {
-          username: req.params.username,
-          id: blog._id,
-          title: blog.title,
-          content: blog.body,
-          count: blog.prPb,
-          tag: blog.tag,
-          display: blog.prPb == "private" ? "block" : "none",
-          avatar : user ? user.avatar : ''
-        });
-      }
+    User.findOne({ username: req.params.username }, (err, user) => {
+      Blog.findOne({ _id: requestedPostId }, function (err, blog) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("post", {
+            username: req.params.username,
+            id: blog._id,
+            title: blog.title,
+            content: blog.body,
+            count: blog.prPb,
+            tag: blog.tag,
+            display: blog.prPb == "private" ? "block" : "none",
+            avatar: user ? user.avatar : "",
+          });
+        }
+      });
     });
-  });
   } else {
     res.redirect("/");
   }
@@ -840,8 +830,7 @@ app.post("/home/:username", (req, res) => {
       owner: req.params.username,
       tag: trash.tag,
       prPb: trash.prPb,
-      avatar : trash.avatar,
-     
+      avatar: trash.avatar,
     });
     trashBlog.save();
 
@@ -857,24 +846,22 @@ app.post("/home/:username", (req, res) => {
 //getting to  users trash
 app.get("/trash/:username", function (req, res) {
   if (req.isAuthenticated()) {
-    User.findOne({username: req.params.username}, (err, user)=>{
-    
-    Trash.find({ owner: req.params.username }, function (err, blogs) {
-      // console.log("length of trashBlogs ", blogs.length)
-      if (err) {
-        console.log("error occur");
-      } else {
-        res.render("trash", {
-          posts: blogs,
-          count: blogs.length + "-Trashes",
-          username: req.params.username,
-          avatar : user ? user.avatar : ''
-        
-        });
-      }
-    })
-      .sort("-date")
-      .sort("-time");
+    User.findOne({ username: req.params.username }, (err, user) => {
+      Trash.find({ owner: req.params.username }, function (err, blogs) {
+        // console.log("length of trashBlogs ", blogs.length)
+        if (err) {
+          console.log("error occur");
+        } else {
+          res.render("trash", {
+            posts: blogs,
+            count: blogs.length + "-Trashes",
+            username: req.params.username,
+            avatar: user ? user.avatar : "",
+          });
+        }
+      })
+        .sort("-date")
+        .sort("-time");
     });
   } else {
     res.redirect("/");
@@ -900,8 +887,7 @@ app.post("/trash/:username", (req, res) => {
         owner: req.params.username,
         tag: blog.tag,
         prPb: blog.prPb,
-        avatar : blog.avatar,
-  
+        avatar: blog.avatar,
       });
       post.save(err);
     }
@@ -933,23 +919,22 @@ app.get("/editBlog/:blogId/:username", (req, res) => {
   if (req.isAuthenticated()) {
     // console.log("edit post id " + req.params.blogId);
     // autocomplete the previious title and body
-    User.findOne({username: req.params.username}, (err, user)=>{
-   
-    Blog.findById(req.params.blogId, (err, docs) => {
-      if (!err) {
-        res.render("editBlog", {
-          username: req.params.username,
-          editPostId: req.params.blogId,
-          title: docs.title,
-          body: docs.body,
-          count: "edit",
-          tag: docs.tag,
-          prPb: docs.prPb,
-          avatar : user ? user.avatar : ''
-        });
-      }
+    User.findOne({ username: req.params.username }, (err, user) => {
+      Blog.findById(req.params.blogId, (err, docs) => {
+        if (!err) {
+          res.render("editBlog", {
+            username: req.params.username,
+            editPostId: req.params.blogId,
+            title: docs.title,
+            body: docs.body,
+            count: "edit",
+            tag: docs.tag,
+            prPb: docs.prPb,
+            avatar: user ? user.avatar : "",
+          });
+        }
+      });
     });
-  });
   } else {
     res.redirect("/");
   }
@@ -997,7 +982,7 @@ app.post("/editBlog/:username", (req, res) => {
             if (err) {
               console.log(err);
             } else {
-              res.redirect("/posts/" + editPostId+"/"+ req.params.username);
+              res.redirect("/posts/" + editPostId + "/" + req.params.username);
               // console.log("update successfully", docs);
             }
           }
@@ -1010,81 +995,76 @@ app.post("/editBlog/:username", (req, res) => {
 // making private blog to public blog
 app.get("/pr-to-pb/:blogId/:username", (req, res) => {
   if (req.isAuthenticated()) {
-
-
     const reqBlog = req.params.blogId;
     const onwner = req.params.owner;
     let dateOF = myDate();
-    User.findOne({username: req.params.username}, (err, user1)=>{
-    Blog.findByIdAndUpdate(reqBlog, { prPb: "public" }, (err, docs) => {
-      if (err) {
-        console.log(err);
-      } else {
-        // storing the blog in publicBlog model
-        const blog = new publicBlog({
-          _id: docs.id,
-          title: docs.title,
-          body: docs.body,
-          date: dateOF[0],
-          time: dateOF[1],
-          owner: docs.owner,
-          tag: docs.tag,
-          prPb: "public",
-          avatar : user1.avatar,
-         
-        });
-        blog.save((err) => {
-          if (err) {
-            console.log(err);
-          } else {
-            User.updateMany({subs: req.params.username}, {
-              $push :{
-                notBlogBy :{
-                  blogId : docs.id,
-                  blogTitle : docs.title,
-                  date: dateOF[0],
-                  time: dateOF[1],
-                  blogBy : docs.owner,
-    
+    User.findOne({ username: req.params.username }, (err, user1) => {
+      Blog.findByIdAndUpdate(reqBlog, { prPb: "public" }, (err, docs) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // storing the blog in publicBlog model
+          const blog = new publicBlog({
+            _id: docs.id,
+            title: docs.title,
+            body: docs.body,
+            date: dateOF[0],
+            time: dateOF[1],
+            owner: docs.owner,
+            tag: docs.tag,
+            prPb: "public",
+            avatar: user1.avatar,
+          });
+          blog.save((err) => {
+            if (err) {
+              console.log(err);
+            } else {
+              User.updateMany(
+                { subs: req.params.username },
+                {
+                  $push: {
+                    notBlogBy: {
+                      blogId: docs.id,
+                      blogTitle: docs.title,
+                      date: dateOF[0],
+                      time: dateOF[1],
+                      blogBy: docs.owner,
+                    },
+                  },
+                },
+                (err, success) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    res.redirect("/home/" + req.params.username);
+                  }
                 }
-              }
-            }, (err, success)=>{
-              if (err){
-                console.log(err)
-              }else{
-                res.redirect("/home/" + req.params.username);
-              }
-            })
-            
-          }
-        });
-      }
+              );
+            }
+          });
+        }
+      });
     });
-  })
   } else {
     res.redirect("/");
   }
-
 });
 
 app.get("/community/:username", (req, res) => {
-  
-
-  
   if (req.isAuthenticated()) {
-    User.findOne({username: req.params.username}, (err, user)=>{
-    User.find({}, (err, users) => {
-      Feedback.find({}, (err, feebacks) => {
-        res.render("community", {
-          users: users,
-          count: "community",
-          username: req.params.username,
-          feebacks: feebacks,
-          avatar : user ? user.avatar : ''
-        });
-      }).sort({subscription : -1});
-    })
-  })
+    User.findOne({ username: req.params.username }, (err, user) => {
+      User.find({}, (err, users) => {
+        Feedback.find({}, (err, feebacks) => {
+          res.render("community", {
+            users: users,
+            count: "community",
+            username: req.params.username,
+            feebacks: feebacks,
+            avatar: user ? user.avatar : "",
+          });
+        }).sort({ subscription: -1 });
+      });
+    });
   } else {
     res.redirect("/");
   }
@@ -1121,12 +1101,12 @@ app.get("/notification/:username/", (req, res) => {
         user: user,
         count: "Notify",
         username: req.params.username,
-        subscription: user.notSub ? user.notSub.reverse(): "",
-        likeBy: user.notLikedBy ? user.notLikedBy.reverse():"",
-        commentBy: user.notCommentBy ? user.notCommentBy.reverse():"",
-        subRemoved: user.subRemoved  ? user.subRemoved.reverse():"",
-        avatar : user ? user.avatar : '',
-        notBlogBy : user ? user.notBlogBy.reverse() : "",
+        subscription: user.notSub ? user.notSub.reverse() : "",
+        likeBy: user.notLikedBy ? user.notLikedBy.reverse() : "",
+        commentBy: user.notCommentBy ? user.notCommentBy.reverse() : "",
+        subRemoved: user.subRemoved ? user.subRemoved.reverse() : "",
+        avatar: user ? user.avatar : "",
+        notBlogBy: user ? user.notBlogBy.reverse() : "",
       });
     }
   });
@@ -1180,7 +1160,7 @@ app.get("/delete/likes/:blogId/:by/:username", (req, res) => {
       $pull: {
         notLikedBy: {
           blogId: req.params.blogId,
-          likedBy : req.params.by
+          likedBy: req.params.by,
         },
       },
     },
@@ -1237,11 +1217,11 @@ app.get("/activities/:username", (req, res) => {
     res.render("activities", {
       count: "activities",
       username: req.params.username,
-      likedTo: user.likedTo ?  user.likedTo.reverse() : '',
-      commentTo: user.commentTo ? user.commentTo.reverse() :'',
-      subscription: user.subscription ? user.subscription.reverse() :'',
-      subscribedTo: user.subscribedTo ? user.subscribedTo.reverse() :'',
-      avatar : user ? user.avatar : ''
+      likedTo: user.likedTo ? user.likedTo.reverse() : "",
+      commentTo: user.commentTo ? user.commentTo.reverse() : "",
+      subscription: user.subscription ? user.subscription.reverse() : "",
+      subscribedTo: user.subscribedTo ? user.subscribedTo.reverse() : "",
+      avatar: user ? user.avatar : "",
     });
   });
 });
@@ -1307,33 +1287,39 @@ app.get("/remove-sub/:sub/:username", (req, res) => {
 
 // setting up the avatar thing
 
-app.get("/avatar/https://avatars.dicebear.com/api/avataaars/:link.svg/:username", (req, res) => {
-  // res.send(req.link, +'sdf');
-  const link = req.params.link
-  const avatar = `https://avatars.dicebear.com/api/avataaars/${link}.svg`
-  User.findOneAndUpdate({username:req.params.username}, {
-    avatar : avatar
-  }, (err, success)=>{
-    if(err){
-      console.log(err)
-    }else{
-      publicBlog.updateMany({owner : req.params.username}, {
-        avatar : avatar
-      }, (err, success)=>{
-        if(err){
-          console.log(err)
-        }else{
-          res.redirect("/home/"+req.params.username)
+app.get(
+  "/avatar/https://avatars.dicebear.com/api/avataaars/:link.svg/:username",
+  (req, res) => {
+    // res.send(req.link, +'sdf');
+    const link = req.params.link;
+    const avatar = `https://avatars.dicebear.com/api/avataaars/${link}.svg`;
+    User.findOneAndUpdate(
+      { username: req.params.username },
+      {
+        avatar: avatar,
+      },
+      (err, success) => {
+        if (err) {
+          console.log(err);
+        } else {
+          publicBlog.updateMany(
+            { owner: req.params.username },
+            {
+              avatar: avatar,
+            },
+            (err, success) => {
+              if (err) {
+                console.log(err);
+              } else {
+                res.redirect("/home/" + req.params.username);
+              }
+            }
+          );
         }
-      })
-     
-    }
-  })
-  
-});
-
-
-
+      }
+    );
+  }
+);
 
 const port = process.env.PORT || 5500;
 app.listen(port, function () {

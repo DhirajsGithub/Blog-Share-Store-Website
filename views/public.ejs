@@ -174,7 +174,7 @@ posts.forEach(function(post, index){ %>
         <div>
           <h4 class="uk-comment-title uk-margin-remove">
             <a class="uk-link-reset" href="#"
-              ><%=post.owner.slice(0, post.owner.length-4)%></a
+              ><%=post.owner.slice(0, post.owner.length-4).substring(0,14)%></a
             >
           </h4>
           <br />
