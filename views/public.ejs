@@ -70,7 +70,7 @@ posts.forEach(function(post, index){ %>
           <!-- <span uk-icon="icon: heart; ratio: 1.5"></span> -->
           <form action="/likes/<%=post.id%>/<%=post.owner%>/<%=username%>" method="post">
             <input type="text" value="1" hidden name="defaultLike">
-            <button type="submit"  uk-tooltip="Like" class='like-toggle basic2'>♥</button> &nbsp; :  &nbsp;<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:large;"
+            <button type="submit"  uk-tooltip="Like" class='like-toggle basic2'><span>🤍</span></button> &nbsp; :  &nbsp;<span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size:large;"
             ><%=Array.from(new Set(post.like)).length%></span>
 
           </form>
