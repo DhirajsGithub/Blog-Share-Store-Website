@@ -33,8 +33,11 @@
       <h3>Your Blog folder is Empty !!!</h3>
       <a href="/compose/<%=username%>">Compose a new Blog</a>
     </div>
-   
     <%} %>
+    <% else{ %>
+      <h3>No Public Post Yet !!!</h3>
+   <% } %>
+   
     
 
 <form action="/home/<%=username%>" method="post" style="display: flex; flex-wrap: wrap;  margin-top: 20px;">
