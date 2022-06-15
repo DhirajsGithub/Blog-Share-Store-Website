@@ -33,8 +33,7 @@
       <h3>Your Blog folder is Empty !!!</h3>
       <a href="/compose/<%=username%>">Compose a new Blog</a>
     </div>
-    <%} %>
-    <% else{ %>
+    <%}else if(posts.length === 0){ %>
       <h3>No Public Post Yet !!!</h3>
    <% } %>
    
