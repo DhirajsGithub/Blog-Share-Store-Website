@@ -258,15 +258,18 @@ a{
 
 
 /* ##################################### media query to public posts ###################### */
-@media only screen and (max-width: 600px) {
-  .public-posts {
-   width: 100%;
-  }
-}
-@media (max-width: 800px) {
+@media only screen and (min-width: 600px) {
   .public-posts {
    width: 100% !important;
   }
+  .like-toggle{
+    color: white !important;
+  }
 }
+/* @media (max-width: 800px) {
+  .public-posts {
+   width: 100% !important;
+  }
+} */
 
 
