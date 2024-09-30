@@ -29,16 +29,17 @@ posts.forEach(function(post, index){ %>
     <div class="uk-comment-body" style="width: 64%">
       <div style="text-align: left">
         <h2
-          style="
-            margin-bottom: 10px;
-            text-decoration: underline;
-            text-shadow: 4px 4px 5px rgb(136, 136, 136);
-            text-decoration-thickness: 2px;
-            text-transform: capitalize;
-          "
-        >
-          <%=post.title.substring(0,20)%>
-        </h2>
+  style="
+    margin-bottom: 10px;
+    text-decoration: underline;
+    text-shadow: 4px 4px 5px rgb(136, 136, 136);
+    text-decoration-thickness: 2px;
+    text-transform: capitalize;
+  "
+>
+  <%= post.title.length > 20 ? post.title.substring(0, 20) + '...' : post.title %>
+</h2>
+
         <div style="padding-left: 10px; padding-bottom: 10px">
           <span class="uk-label uk-label-danger"><%=post.tag.substring(0,15)%></span>
         </div>

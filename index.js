@@ -34,8 +34,19 @@ app.use(passport.session()); // using passport to use session
 
 // const url = "mongodb://localhost:27017/blogsDB";
 const url =
-  "mongodb+srv://dhirajborse:tAhXGWRCf7c4xjF8@cluster0.tzdsj.mongodb.net/blogsDB";
-mongoose.connect(url, { useNewUrlParser: true });
+  "mongodb+srv://dhirajborse:dhirajscluster%40123.in@cluster0.tzdsj.mongodb.net/blogsDB";
+
+mongoose
+  .connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Successfully connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err.message);
+  });
 
 // it must be a mongoose schema and not standard .js object
 const userSchema = new mongoose.Schema({
@@ -99,7 +110,7 @@ const userSchema = new mongoose.Schema({
 
   avatar: {
     default:
-      "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
+      "https://api.dicebear.com/9.x/bottts/svg",
     type: String,
   },
 });
@@ -140,7 +151,7 @@ const publicBlogSchema = new mongoose.Schema({
   prPb: String,
   avatar: {
     default:
-      "https://zopto.com/blog/wp-content/uploads/2020/11/def-user-profile-img.jpeg",
+      "https://api.dicebear.com/9.x/bottts/svg",
     type: String,
   },
 });
@@ -1288,11 +1299,13 @@ app.get("/remove-sub/:sub/:username", (req, res) => {
 // setting up the avatar thing
 
 app.get(
-  "/avatar/https://avatars.dicebear.com/api/avataaars/:link.svg/:username",
+  "/avatar/:link/:username",
   (req, res) => {
     // res.send(req.link, +'sdf');
     const link = req.params.link;
-    const avatar = `https://avatars.dicebear.com/api/avataaars/${link}.svg`;
+    
+    // https://api.dicebear.com/9.x/pixel-art/svg?seed=<%=i%>.svg
+    const avatar = `https://api.dicebear.com/9.x/pixel-art/svg?seed=${link}.svg`;
     User.findOneAndUpdate(
       { username: req.params.username },
       {

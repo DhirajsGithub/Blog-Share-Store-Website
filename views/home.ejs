@@ -30,11 +30,11 @@
         <div style="display:flex; flex-wrap: wrap;" class="uk-modal-body" uk-overflow-auto>
 
           
-        <%  for (let i=0; i<= 1500; i = i+2){ %>
+        <%  for (let i=0; i<= 45; i = i+1){ %>
          
        
-          <a href="/avatar/https://avatars.dicebear.com/api/avataaars/<%=i%>.svg/<%=username%>">
-            <img style="width:51px ; margin: 10px; border: 1px solid black;" src="https://avatars.dicebear.com/api/avataaars/<%=i%>.svg" width="50" height="50" >
+          <a href="/avatar/<%=i%>/<%=username%>">
+            <img style="width:51px ; margin: 10px; border: 1px solid black;" src="https://api.dicebear.com/9.x/pixel-art/svg?seed=<%=i%>.svg" width="50" height="50" >
           </a>
           <br> 
       <%    } %>
@@ -73,7 +73,10 @@
               <div class="uk-width-auto">
               </div>
               <div class="uk-width-expand" >
-                  <h3 class="uk-card-title uk-margin-remove-bottom"><%=post.title.substring(0, 15)%></h3>
+                <h3 class="uk-card-title uk-margin-remove-bottom">
+                  <%= post.title.length > 15 ? post.title.substring(0, 15) + '...' : post.title %>
+                </h3>
+                
                   <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00"><%=post.date%> &nbsp;  |&nbsp;  <%=post.time%></time></p>
                   <span class="uk-label uk-label-danger"><%=post.tag.substring(0, 10)%></span>
                   <span style="font-size:14px; float: right;" class="uk-badge"><%=post.prPb%></span>
